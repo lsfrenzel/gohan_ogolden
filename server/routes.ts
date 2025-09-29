@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import multer from "multer";
@@ -30,7 +31,7 @@ const upload = multer({
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Serve uploaded files
-  app.use("/uploads", require("express").static("uploads"));
+  app.use("/uploads", express.static("uploads"));
 
   // Get all timeline data grouped by year
   app.get("/api/timeline", async (req, res) => {
