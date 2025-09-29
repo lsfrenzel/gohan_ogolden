@@ -3,17 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Upload, X, Check } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface AdminPanelProps {
   onClose: () => void;
+  onUploadSuccess?: () => void;
 }
 
-export default function AdminPanel({ onClose }: AdminPanelProps) {
+export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps) {
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const { toast } = useToast();
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
@@ -56,17 +59,48 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     if (!selectedYear || files.length === 0) return;
     
     setUploading(true);
-    //todo: remove mock functionality
-    await new Promise(resolve => setTimeout(resolve, 1500));
     
-    setUploading(false);
-    setUploadSuccess(true);
-    
-    setTimeout(() => {
-      setFiles([]);
-      setSelectedYear(null);
-      setUploadSuccess(false);
-    }, 2000);
+    try {
+      const formData = new FormData();
+      formData.append('year', selectedYear.toString());
+      files.forEach(file => {
+        formData.append('files', file);
+      });
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const result = await response.json();
+      
+      setUploading(false);
+      setUploadSuccess(true);
+      
+      toast({
+        title: "Upload bem-sucedido!",
+        description: `${result.count} arquivo(s) adicionado(s) à timeline de ${selectedYear}`,
+      });
+
+      setTimeout(() => {
+        setFiles([]);
+        setSelectedYear(null);
+        setUploadSuccess(false);
+        onUploadSuccess?.();
+        onClose();
+      }, 1500);
+    } catch (error) {
+      setUploading(false);
+      toast({
+        title: "Erro no upload",
+        description: "Não foi possível fazer o upload dos arquivos. Tente novamente.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
