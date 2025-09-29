@@ -1,37 +1,45 @@
-import { type User, type InsertUser } from "@shared/schema";
+import { type Media, type InsertMedia } from "@shared/schema";
 import { randomUUID } from "crypto";
 
-// modify the interface with any CRUD methods
-// you might need
-
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  createMedia(media: InsertMedia): Promise<Media>;
+  getMediaByYear(year: number): Promise<Media[]>;
+  getAllMedia(): Promise<Media[]>;
+  getYears(): Promise<number[]>;
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
+  private media: Map<string, Media>;
 
   constructor() {
-    this.users = new Map();
+    this.media = new Map();
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
+  async createMedia(insertMedia: InsertMedia): Promise<Media> {
     const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+    const media: Media = { 
+      ...insertMedia, 
+      id,
+      uploadedAt: new Date().toISOString()
+    };
+    this.media.set(id, media);
+    return media;
+  }
+
+  async getMediaByYear(year: number): Promise<Media[]> {
+    return Array.from(this.media.values())
+      .filter(m => m.year === year)
+      .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime());
+  }
+
+  async getAllMedia(): Promise<Media[]> {
+    return Array.from(this.media.values())
+      .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime());
+  }
+
+  async getYears(): Promise<number[]> {
+    const years = new Set(Array.from(this.media.values()).map(m => m.year));
+    return Array.from(years).sort((a, b) => b - a);
   }
 }
 
