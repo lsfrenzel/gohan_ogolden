@@ -36,7 +36,7 @@ export default function TimelineSection({ year, age, media, isFirst = false }: T
           initial={{ scale: 0 }}
           animate={isInView ? { scale: 1 } : { scale: 0 }}
           transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
-          className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-primary border-2 sm:border-3 md:border-4 border-background shadow-lg flex items-center justify-center ${isFirst ? '' : 'mt-6 sm:mt-8'}`}
+          className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-primary border-2 sm:border-[3px] md:border-4 border-background shadow-lg flex items-center justify-center ${isFirst ? '' : 'mt-6 sm:mt-8'}`}
         >
           <span className="font-display text-lg sm:text-xl md:text-2xl font-bold text-primary-foreground">
             {year}
@@ -66,7 +66,7 @@ export default function TimelineSection({ year, age, media, isFirst = false }: T
         </motion.div>
         
         {media.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
             {media.map((item, index) => (
               <motion.div
                 key={item.id}

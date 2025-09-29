@@ -28,7 +28,7 @@ export default function HeroSection() {
                 ]
               }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full overflow-hidden border-4 sm:border-6 md:border-8 border-primary shadow-xl"
+              className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full overflow-hidden border-4 sm:border-[6px] md:border-8 border-primary shadow-xl"
             >
               <img 
                 src={gohanImage} 
