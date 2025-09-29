@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Upload, X, Check } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface AdminPanelProps {
   onClose: () => void;
@@ -104,44 +105,62 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
   };
 
   return (
-    <div className="min-h-screen bg-background py-12 px-6">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="min-h-screen bg-background py-8 sm:py-12 px-4 sm:px-6"
+    >
+      <motion.div 
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-3xl mx-auto"
+      >
+        <div className="flex items-center justify-between mb-6 sm:mb-8">
           <div>
-            <h1 className="font-display text-4xl font-bold text-foreground mb-2">
+            <h1 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-2">
               Admin Panel
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-sm sm:text-base text-muted-foreground">
               Upload new photos and videos to Gohan's timeline
             </p>
           </div>
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={onClose}
-            data-testid="button-close-admin"
-          >
-            <X className="w-5 h-5" />
-          </Button>
+          <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.2 }}>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={onClose}
+              data-testid="button-close-admin"
+            >
+              <X className="w-5 h-5" />
+            </Button>
+          </motion.div>
         </div>
 
-        <Card className="p-8">
+        <Card className="p-6 sm:p-8">
           <div className="space-y-6">
             <div>
               <Label className="text-base font-semibold mb-3 block">
                 Select Year
               </Label>
-              <div className="grid grid-cols-5 gap-2">
-                {years.map(year => (
-                  <Button
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                {years.map((year, index) => (
+                  <motion.div
                     key={year}
-                    variant={selectedYear === year ? "default" : "outline"}
-                    onClick={() => setSelectedYear(year)}
-                    className="font-display text-lg"
-                    data-testid={`button-year-${year}`}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.05 }}
                   >
-                    {year}
-                  </Button>
+                    <Button
+                      variant={selectedYear === year ? "default" : "outline"}
+                      onClick={() => setSelectedYear(year)}
+                      className="w-full font-display text-base sm:text-lg"
+                      data-testid={`button-year-${year}`}
+                    >
+                      {year}
+                    </Button>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -150,10 +169,12 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
               <Label className="text-base font-semibold mb-3 block">
                 Upload Photos & Videos
               </Label>
-              <div
-                className={`border-2 border-dashed rounded-xl p-12 text-center transition-colors ${
-                  dragActive ? 'border-primary bg-primary/5' : 'border-border'
-                }`}
+              <motion.div
+                animate={{ 
+                  borderColor: dragActive ? "hsl(var(--primary))" : "hsl(var(--border))",
+                  backgroundColor: dragActive ? "hsl(var(--primary) / 0.05)" : "transparent"
+                }}
+                className="border-2 border-dashed rounded-xl p-8 sm:p-12 text-center transition-colors"
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
                 onDragOver={handleDrag}
@@ -172,49 +193,65 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
                   className="cursor-pointer"
                   data-testid="label-file-upload"
                 >
-                  <div className="text-6xl mb-4 opacity-40">🐾</div>
-                  <Upload className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-lg font-medium text-foreground mb-2">
+                  <motion.div 
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="text-5xl sm:text-6xl mb-4 opacity-40"
+                  >
+                    🐾
+                  </motion.div>
+                  <Upload className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-base sm:text-lg font-medium text-foreground mb-2">
                     Drop files here or click to upload
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     Support for images and videos
                   </p>
                 </label>
-              </div>
+              </motion.div>
             </div>
 
-            {files.length > 0 && (
-              <div>
-                <Label className="text-base font-semibold mb-3 block">
-                  Selected Files ({files.length})
-                </Label>
-                <div className="space-y-2 max-h-48 overflow-y-auto">
-                  {files.map((file, index) => (
-                    <div 
-                      key={index}
-                      className="flex items-center justify-between p-3 bg-muted rounded-lg"
-                    >
-                      <span className="text-sm truncate flex-1">{file.name}</span>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeFile(index)}
-                        className="flex-shrink-0"
-                        data-testid={`button-remove-${index}`}
+            <AnimatePresence>
+              {files.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                >
+                  <Label className="text-base font-semibold mb-3 block">
+                    Selected Files ({files.length})
+                  </Label>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {files.map((file, index) => (
+                      <motion.div 
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 20 }}
+                        transition={{ delay: index * 0.05 }}
+                        className="flex items-center justify-between p-3 bg-muted rounded-lg"
                       >
-                        <X className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+                        <span className="text-xs sm:text-sm truncate flex-1">{file.name}</span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeFile(index)}
+                          className="flex-shrink-0"
+                          data-testid={`button-remove-${index}`}
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <Button
               onClick={handleUpload}
               disabled={!selectedYear || files.length === 0 || uploading}
-              className="w-full text-lg py-6"
+              className="w-full text-base sm:text-lg py-5 sm:py-6"
               data-testid="button-upload"
             >
               {uploading ? (
@@ -236,7 +273,7 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
             </Button>
           </div>
         </Card>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
