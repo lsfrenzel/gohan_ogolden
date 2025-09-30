@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Volume2 } from "lucide-react";
+import backgroundMusicUrl from "@assets/Falling In Love_1759257959225.mp3";
 
 export default function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -29,7 +30,7 @@ export default function MusicPlayer() {
         ref={audioRef} 
         loop
         autoPlay
-        src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3"
+        src={backgroundMusicUrl}
       />
       
       {showPlayButton && (
