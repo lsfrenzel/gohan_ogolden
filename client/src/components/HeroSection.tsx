@@ -1,10 +1,55 @@
 import gohanImage from "@assets/gohan_1759242750019.jpg";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MediaLightbox from "./MediaLightbox";
+import { Card } from "@/components/ui/card";
+import { Cake, Calendar } from "lucide-react";
 
 export default function HeroSection() {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [currentAge, setCurrentAge] = useState({ years: 0, months: 0, days: 0 });
+  const [daysUntilBirthday, setDaysUntilBirthday] = useState(0);
+
+  const birthDate = new Date(2022, 1, 11); // 11/02/2022 (month is 0-indexed)
+
+  useEffect(() => {
+    const calculateAge = () => {
+      const now = new Date();
+      
+      // Calculate age
+      let years = now.getFullYear() - birthDate.getFullYear();
+      let months = now.getMonth() - birthDate.getMonth();
+      let days = now.getDate() - birthDate.getDate();
+
+      if (days < 0) {
+        months--;
+        const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += lastMonth.getDate();
+      }
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      setCurrentAge({ years, months, days });
+
+      // Calculate days until next birthday
+      let nextBirthday = new Date(now.getFullYear(), 1, 11); // Feb 11
+      if (now > nextBirthday) {
+        nextBirthday = new Date(now.getFullYear() + 1, 1, 11);
+      }
+      
+      const diffTime = nextBirthday.getTime() - now.getTime();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      setDaysUntilBirthday(diffDays);
+    };
+
+    calculateAge();
+    const interval = setInterval(calculateAge, 1000 * 60 * 60); // Update every hour
+
+    return () => clearInterval(interval);
+  }, []);
   
   const heroMedia = [
     {
@@ -237,10 +282,119 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.9 }}
-          className="text-sm sm:text-base md:text-lg text-amber-800/80 max-w-2xl mx-auto px-4 leading-relaxed"
+          className="text-sm sm:text-base md:text-lg text-amber-800/80 max-w-2xl mx-auto px-4 leading-relaxed mb-6 sm:mb-8"
         >
           Bem-vindo à linha do tempo do Gohan! Acompanhe a incrível jornada do nosso amado golden retriever, desde seus adoráveis dias de filhote até o maravilhoso companheiro que ele é hoje.
         </motion.p>
+
+        {/* Age and Birthday Counters */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.1 }}
+          className="max-w-2xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 gap-4"
+        >
+          {/* Age Counter */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Card className="p-4 sm:p-6 relative overflow-hidden group cursor-default">
+              <motion.div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: "radial-gradient(circle at center, rgba(245, 158, 11, 0.1), transparent)"
+                }}
+              />
+              <div className="relative z-10">
+                <div className="flex items-center justify-center mb-2 sm:mb-3">
+                  <motion.div
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Cake className="w-6 h-6 sm:w-8 sm:h-8 text-amber-600" />
+                  </motion.div>
+                </div>
+                <h3 className="text-xs sm:text-sm font-semibold text-amber-900/70 mb-2 text-center">
+                  Idade Atual
+                </h3>
+                <div className="text-center">
+                  <motion.div 
+                    className="text-2xl sm:text-3xl font-display font-bold"
+                    style={{
+                      background: "linear-gradient(135deg, #92400E, #F59E0B, #FBBF24)",
+                      backgroundSize: "200% auto",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                    key={`${currentAge.years}-${currentAge.months}-${currentAge.days}`}
+                    initial={{ scale: 1.2, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    {currentAge.years} {currentAge.years === 1 ? 'ano' : 'anos'}
+                  </motion.div>
+                  <div className="text-xs sm:text-sm text-amber-700/70 mt-1">
+                    {currentAge.months} {currentAge.months === 1 ? 'mês' : 'meses'} e {currentAge.days} {currentAge.days === 1 ? 'dia' : 'dias'}
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+
+          {/* Days Until Birthday */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Card className="p-4 sm:p-6 relative overflow-hidden group cursor-default">
+              <motion.div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: "radial-gradient(circle at center, rgba(245, 158, 11, 0.1), transparent)"
+                }}
+              />
+              <div className="relative z-10">
+                <div className="flex items-center justify-center mb-2 sm:mb-3">
+                  <motion.div
+                    animate={{ 
+                      scale: [1, 1.2, 1],
+                      rotate: [0, 5, -5, 0]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Calendar className="w-6 h-6 sm:w-8 sm:h-8 text-amber-600" />
+                  </motion.div>
+                </div>
+                <h3 className="text-xs sm:text-sm font-semibold text-amber-900/70 mb-2 text-center">
+                  Próximo Aniversário
+                </h3>
+                <div className="text-center">
+                  <motion.div 
+                    className="text-2xl sm:text-3xl font-display font-bold"
+                    style={{
+                      background: "linear-gradient(135deg, #92400E, #F59E0B, #FBBF24)",
+                      backgroundSize: "200% auto",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                    key={daysUntilBirthday}
+                    initial={{ scale: 1.2, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    {daysUntilBirthday} {daysUntilBirthday === 1 ? 'dia' : 'dias'}
+                  </motion.div>
+                  <div className="text-xs sm:text-sm text-amber-700/70 mt-1">
+                    11 de fevereiro
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        </motion.div>
       </motion.div>
       
       {/* Animated decorative paws */}

@@ -19,8 +19,7 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const { toast } = useToast();
 
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
+  const years = Array.from({ length: 9 }, (_, i) => 2022 + i); // 2022 to 2030
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
