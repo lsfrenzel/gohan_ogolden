@@ -120,7 +120,7 @@ export default function MediaLightbox({ media, currentIndex, isOpen, onClose }: 
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="absolute inset-0 flex items-center justify-center p-4 sm:p-8"
+              className="absolute inset-0 flex items-center justify-center p-4 sm:p-8 z-10"
               style={{ 
                 paddingTop: '4rem',
                 paddingBottom: '5rem',
