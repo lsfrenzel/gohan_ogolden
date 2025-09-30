@@ -1,5 +1,7 @@
-import { type Media, type InsertMedia } from "@shared/schema";
+import { type Media, type InsertMedia, media } from "@shared/schema";
 import { randomUUID } from "crypto";
+import { getDb } from "./db";
+import { eq, desc } from "drizzle-orm";
 
 export interface IStorage {
   createMedia(media: InsertMedia): Promise<Media>;
@@ -43,4 +45,52 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DBStorage implements IStorage {
+  async createMedia(insertMedia: InsertMedia): Promise<Media> {
+    const db = getDb();
+    const newMedia: Media = {
+      id: randomUUID(),
+      ...insertMedia,
+      uploadedAt: new Date().toISOString(),
+    };
+
+    await db.insert(media).values(newMedia);
+    return newMedia;
+  }
+
+  async getMediaByYear(year: number): Promise<Media[]> {
+    const db = getDb();
+    const result = await db
+      .select()
+      .from(media)
+      .where(eq(media.year, year))
+      .orderBy(desc(media.uploadedAt));
+    
+    return result;
+  }
+
+  async getAllMedia(): Promise<Media[]> {
+    const db = getDb();
+    const result = await db
+      .select()
+      .from(media)
+      .orderBy(desc(media.uploadedAt));
+    
+    return result;
+  }
+
+  async getYears(): Promise<number[]> {
+    const db = getDb();
+    const result = await db
+      .selectDistinct({ year: media.year })
+      .from(media)
+      .orderBy(desc(media.year));
+    
+    return result.map((r: { year: number }) => r.year);
+  }
+}
+
+const isDevelopment = process.env.NODE_ENV === "development";
+const useDatabase = process.env.DATABASE_URL && !isDevelopment;
+
+export const storage = useDatabase ? new DBStorage() : new MemStorage();
