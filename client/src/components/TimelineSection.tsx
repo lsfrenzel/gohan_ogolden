@@ -162,104 +162,131 @@ export default function TimelineSection({ year, age, media, isFirst = false, onM
         </motion.div>
         
         {media.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
             {media.map((item, index) => (
               <motion.div
                 key={item.id}
-                initial={{ opacity: 0, y: 50, rotateX: -30 }}
-                animate={isInView ? { opacity: 1, y: 0, rotateX: 0 } : { opacity: 0, y: 50, rotateX: -30 }}
+                initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                animate={isInView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 50, scale: 0.8 }}
                 transition={{ 
-                  duration: 0.6, 
-                  delay: 0.4 + index * 0.1,
+                  duration: 0.7, 
+                  delay: 0.3 + index * 0.08,
                   type: "spring",
-                  stiffness: 100
+                  stiffness: 120,
+                  damping: 15
                 }}
                 whileHover={{ 
-                  y: -12,
-                  rotateY: 5,
-                  rotateX: 5,
-                  transition: { duration: 0.3 }
+                  y: -15,
+                  scale: 1.03,
+                  transition: { duration: 0.4, ease: "easeOut" }
                 }}
                 onHoverStart={() => setHoveredId(item.id)}
                 onHoverEnd={() => setHoveredId(null)}
-                style={{ transformStyle: "preserve-3d" }}
               >
                 <Card 
-                  className="overflow-hidden cursor-pointer transition-all duration-300 group relative"
+                  className="overflow-hidden cursor-pointer transition-all duration-300 group relative border-2"
                   data-testid={`media-${item.id}`}
                   onClick={() => onMediaClick?.(item.id)}
                   style={{
                     boxShadow: hoveredId === item.id 
-                      ? "0 20px 50px rgba(245, 158, 11, 0.3), 0 10px 30px rgba(0, 0, 0, 0.2)"
-                      : "0 4px 15px rgba(0, 0, 0, 0.1)"
+                      ? "0 25px 60px rgba(245, 158, 11, 0.35), 0 15px 40px rgba(0, 0, 0, 0.25), inset 0 0 30px rgba(245, 158, 11, 0.1)"
+                      : "0 8px 20px rgba(0, 0, 0, 0.12), 0 3px 8px rgba(0, 0, 0, 0.08)",
+                    borderColor: hoveredId === item.id ? "rgba(245, 158, 11, 0.3)" : "transparent"
                   }}
                 >
-                  <div className="relative aspect-square overflow-hidden">
+                  <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50">
+                    {/* Gradient overlay for depth */}
+                    <div 
+                      className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{
+                        background: "radial-gradient(circle at center, transparent 0%, rgba(245, 158, 11, 0.08) 100%)"
+                      }}
+                    />
+                    
                     {/* Shimmer effect on hover */}
                     {hoveredId === item.id && (
                       <motion.div
-                        className="absolute inset-0 z-10 pointer-events-none"
+                        className="absolute inset-0 z-20 pointer-events-none"
                         style={{
-                          background: "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)",
+                          background: "linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.5), transparent)",
                         }}
-                        initial={{ x: "-100%" }}
-                        animate={{ x: "200%" }}
-                        transition={{ duration: 0.8, ease: "easeInOut" }}
+                        initial={{ x: "-150%", y: "-150%" }}
+                        animate={{ x: "150%", y: "150%" }}
+                        transition={{ duration: 1, ease: "easeInOut" }}
                       />
                     )}
+                    
+                    {/* Corner glow effect */}
+                    <motion.div
+                      className="absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 pointer-events-none"
+                      style={{
+                        background: "radial-gradient(circle at top right, rgba(251, 191, 36, 0.4), transparent 70%)",
+                        opacity: hoveredId === item.id ? 1 : 0
+                      }}
+                      transition={{ duration: 0.3 }}
+                    />
                     
                     <motion.img 
                       src={item.type === 'video' ? item.thumbnail : item.url} 
                       alt={`Gohan in ${year}`}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover relative z-10"
                       animate={{ 
-                        scale: hoveredId === item.id ? 1.15 : 1,
-                        filter: hoveredId === item.id ? "brightness(1.1)" : "brightness(1)"
+                        scale: hoveredId === item.id ? 1.12 : 1,
+                        filter: hoveredId === item.id ? "brightness(1.1) saturate(1.1)" : "brightness(1) saturate(1)"
                       }}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
                     />
                     {item.type === 'video' && (
                       <motion.div 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="absolute inset-0 flex items-center justify-center transition-all duration-300"
+                        className="absolute inset-0 flex items-center justify-center transition-all duration-300 z-30"
                         style={{
                           background: hoveredId === item.id 
-                            ? "radial-gradient(circle, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%)"
-                            : "radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%)"
+                            ? "radial-gradient(circle, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.25) 100%)"
+                            : "radial-gradient(circle, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 100%)"
                         }}
                       >
                         {/* Pulsing rings behind play button */}
-                        {hoveredId === item.id && [0, 1].map((i) => (
+                        {[0, 1, 2].map((i) => (
                           <motion.div
                             key={i}
                             className="absolute inset-0 flex items-center justify-center"
-                            initial={{ scale: 1, opacity: 0.5 }}
+                            initial={{ scale: 1, opacity: 0 }}
                             animate={{ 
-                              scale: [1, 1.8],
-                              opacity: [0.3, 0]
+                              scale: hoveredId === item.id ? [1, 2] : 1,
+                              opacity: hoveredId === item.id ? [0.4, 0] : 0
                             }}
                             transition={{
-                              duration: 1.5,
-                              repeat: Infinity,
-                              delay: i * 0.75,
+                              duration: 1.8,
+                              repeat: hoveredId === item.id ? Infinity : 0,
+                              delay: i * 0.6,
                               ease: "easeOut"
                             }}
                           >
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-amber-400" />
+                            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full border-3 border-amber-400" />
                           </motion.div>
                         ))}
                         
                         <motion.div 
-                          whileHover={{ scale: 1.2, rotate: 360 }}
-                          transition={{ duration: 0.5 }}
-                          className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center shadow-2xl relative z-10"
+                          animate={{ 
+                            scale: hoveredId === item.id ? [1, 1.15, 1] : 1,
+                            rotate: hoveredId === item.id ? [0, 5, -5, 0] : 0
+                          }}
+                          transition={{ 
+                            duration: 0.6,
+                            repeat: hoveredId === item.id ? Infinity : 0,
+                            repeatDelay: 0.5
+                          }}
+                          className="w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 rounded-full flex items-center justify-center shadow-2xl relative z-10"
                           style={{
-                            background: "linear-gradient(135deg, #F59E0B, #FBBF24)",
-                            boxShadow: "0 0 30px rgba(245, 158, 11, 0.6), 0 10px 30px rgba(0, 0, 0, 0.3)"
+                            background: "linear-gradient(135deg, #F59E0B, #FBBF24, #F59E0B)",
+                            boxShadow: hoveredId === item.id 
+                              ? "0 0 40px rgba(245, 158, 11, 0.8), 0 15px 40px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.2)"
+                              : "0 0 25px rgba(245, 158, 11, 0.6), 0 10px 30px rgba(0, 0, 0, 0.3)"
                           }}
                         >
-                          <Play className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-white ml-0.5 sm:ml-1" fill="currentColor" style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }} />
+                          <Play className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-9 lg:h-9 text-white ml-1" fill="currentColor" style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.4))" }} />
                         </motion.div>
                       </motion.div>
                     )}
