@@ -77,7 +77,7 @@ export default function MediaLightbox({ media, currentIndex, isOpen, onClose }: 
                 onClick={goToPrevious}
                 size="icon"
                 variant="ghost"
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-[9999] text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-md bg-black/40 rounded-full w-14 h-14 sm:w-16 sm:h-16 border border-white/20 transition-all duration-200 hover:scale-110 shadow-2xl pointer-events-auto"
+                className="fixed left-8 top-1/2 -translate-y-1/2 z-[9999] text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-md bg-black/40 rounded-full w-14 h-14 sm:w-16 sm:h-16 border border-white/20 transition-all duration-200 hover:scale-110 shadow-2xl pointer-events-auto"
                 data-testid="button-previous-media"
               >
                 <ChevronLeft className="w-8 h-8 sm:w-10 sm:h-10" />
@@ -87,7 +87,7 @@ export default function MediaLightbox({ media, currentIndex, isOpen, onClose }: 
                 onClick={goToNext}
                 size="icon"
                 variant="ghost"
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-[9999] text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-md bg-black/40 rounded-full w-14 h-14 sm:w-16 sm:h-16 border border-white/20 transition-all duration-200 hover:scale-110 shadow-2xl pointer-events-auto"
+                className="fixed right-8 top-1/2 -translate-y-1/2 z-[9999] text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-md bg-black/40 rounded-full w-14 h-14 sm:w-16 sm:h-16 border border-white/20 transition-all duration-200 hover:scale-110 shadow-2xl pointer-events-auto"
                 data-testid="button-next-media"
               >
                 <ChevronRight className="w-8 h-8 sm:w-10 sm:h-10" />
