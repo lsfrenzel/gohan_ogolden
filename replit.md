@@ -59,11 +59,13 @@ Preferred communication style: Simple, everyday language.
 
 ### External Dependencies
 
-**Database (Configured, Not Active)**
-- Drizzle ORM as the database toolkit
+**Database (Configured and Ready)**
+- PostgreSQL database provisioned via Replit
+- Drizzle ORM as the database toolkit with schema pushed
 - @neondatabase/serverless for PostgreSQL connectivity (Neon serverless driver)
 - drizzle-zod for schema validation integration
 - Migration system configured via drizzle-kit
+- Currently using in-memory storage (MemStorage) for development; database ready for production use
 
 **File Storage**
 - Multer for multipart/form-data handling and file uploads
@@ -90,4 +92,20 @@ Preferred communication style: Simple, everyday language.
 **Key Integration Points**
 - Google Fonts API for custom typography (Quicksand, Inter, Fredoka)
 - Static asset serving from `attached_assets` directory for images
-- Environment-based configuration (DATABASE_URL expected but optional in current implementation)
+- Environment-based configuration (DATABASE_URL configured via Replit database)
+
+## Replit Environment Setup
+
+### Current Status
+- ✅ Application running on port 5000 (frontend and backend)
+- ✅ Vite dev server configured with `allowedHosts: true` for Replit proxy support
+- ✅ PostgreSQL database provisioned and schema pushed
+- ✅ Development workflow configured: `npm run dev`
+- ✅ Production build configured: `npm run build` + `npm run start`
+- ✅ Deployment configuration ready (autoscale deployment target)
+
+### Key Configuration
+- **Host binding**: Server binds to `0.0.0.0:5000` for public access
+- **Vite proxy**: Configured to accept all hosts for Replit's iframe proxy
+- **File uploads**: Local `uploads/` directory with pre-existing media files
+- **Storage**: In-memory (MemStorage) for demo; database ready for production switch
