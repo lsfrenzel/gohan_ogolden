@@ -1,7 +1,34 @@
 import gohanImage from "@assets/gohan_1759242750019.jpg";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import MediaLightbox from "./MediaLightbox";
 
 export default function HeroSection() {
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  
+  const heroMedia = [
+    {
+      id: 'hero-gohan-1',
+      type: 'image' as const,
+      url: gohanImage,
+    },
+    {
+      id: 'hero-gohan-2',
+      type: 'image' as const,
+      url: '/uploads/1759186370726-488456491.jpg',
+    },
+    {
+      id: 'hero-gohan-3',
+      type: 'image' as const,
+      url: '/uploads/1759234937338-748657691.jpg',
+    },
+    {
+      id: 'hero-gohan-4',
+      type: 'image' as const,
+      url: '/uploads/1759240740973-264380440.jpg',
+    },
+  ];
+
   return (
     <div className="relative py-12 sm:py-16 md:py-20 px-4 sm:px-6 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-card to-background opacity-80"></div>
@@ -28,12 +55,14 @@ export default function HeroSection() {
                 ]
               }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full overflow-hidden border-4 sm:border-[6px] md:border-8 border-primary shadow-xl"
+              className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full overflow-hidden border-4 sm:border-[6px] md:border-8 border-primary shadow-xl cursor-pointer"
+              onClick={() => setIsLightboxOpen(true)}
             >
               <img 
                 src={gohanImage} 
                 alt="Gohan the golden retriever" 
                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                data-testid="img-hero-gohan"
               />
             </motion.div>
             <motion.div 
@@ -62,7 +91,7 @@ export default function HeroSection() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="font-heading text-xl sm:text-2xl md:text-3xl text-muted-foreground mb-4 sm:mb-6 px-4"
         >
-          Gohan o golden retriever
+          Gohan, O Golden
         </motion.p>
         
         <motion.p 
@@ -105,6 +134,13 @@ export default function HeroSection() {
       >
         🐾
       </motion.div>
+      
+      <MediaLightbox
+        media={heroMedia}
+        currentIndex={0}
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+      />
     </div>
   );
 }
