@@ -60,12 +60,12 @@ export default function MediaLightbox({ media, currentIndex, isOpen, onClose }: 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[95vw] w-full h-[95vh] p-0 bg-black/98 border-none overflow-hidden">
-        <div className="relative w-full h-full flex items-center justify-center">
+        <div className="relative w-full h-full">
           <Button
             onClick={onClose}
             size="icon"
             variant="ghost"
-            className="fixed top-4 right-4 z-[100] text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-md bg-black/40 rounded-full w-12 h-12 border border-white/20 transition-all duration-200 hover:scale-110"
+            className="absolute top-4 right-4 z-[200] text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-md bg-black/40 rounded-full w-12 h-12 border border-white/20 transition-all duration-200 hover:scale-110"
             data-testid="button-close-lightbox"
           >
             <X className="w-6 h-6" />
@@ -102,12 +102,12 @@ export default function MediaLightbox({ media, currentIndex, isOpen, onClose }: 
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="absolute inset-0 flex items-center justify-center p-4 sm:p-8 z-10"
+              className="absolute inset-0 flex items-center justify-center p-4 sm:p-8 z-[10]"
               style={{ 
                 paddingTop: '4rem',
                 paddingBottom: '5rem',
-                paddingLeft: 'max(1rem, 5vw)',
-                paddingRight: 'max(1rem, 5vw)'
+                paddingLeft: '5rem',
+                paddingRight: '5rem'
               }}
             >
               {currentMedia.type === 'image' ? (
