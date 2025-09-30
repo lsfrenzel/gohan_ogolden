@@ -30,7 +30,7 @@ export default function HeroSection() {
   ];
 
   return (
-    <div className="relative py-12 sm:py-16 md:py-20 px-4 sm:px-6 overflow-hidden">
+    <div className="relative py-8 sm:py-12 md:py-16 lg:py-20 px-3 sm:px-4 md:px-6 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-card to-background opacity-80"></div>
       
       <motion.div 
@@ -43,7 +43,7 @@ export default function HeroSection() {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-6 sm:mb-8 flex justify-center"
+          className="mb-4 sm:mb-6 md:mb-8 flex justify-center"
         >
           <div className="relative group">
             <motion.div
@@ -55,7 +55,7 @@ export default function HeroSection() {
                 ]
               }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full overflow-hidden border-4 sm:border-[6px] md:border-8 border-primary shadow-xl cursor-pointer"
+              className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full overflow-hidden border-3 sm:border-4 md:border-[6px] lg:border-8 border-primary shadow-xl cursor-pointer"
               onClick={() => setIsLightboxOpen(true)}
             >
               <img 
@@ -69,7 +69,7 @@ export default function HeroSection() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-              className="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 bg-primary text-primary-foreground rounded-full w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center text-2xl sm:text-3xl shadow-lg"
+              className="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 bg-primary text-primary-foreground rounded-full w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 flex items-center justify-center text-xl sm:text-2xl md:text-3xl shadow-lg"
             >
               🐾
             </motion.div>
@@ -80,7 +80,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-3 sm:mb-4"
+          className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-2 sm:mb-3 md:mb-4"
         >
           Jornada do Gohan
         </motion.h1>
@@ -89,7 +89,7 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="font-heading text-xl sm:text-2xl md:text-3xl text-muted-foreground mb-4 sm:mb-6 px-4"
+          className="font-heading text-lg sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground mb-3 sm:mb-4 md:mb-6 px-4"
         >
           Gohan, O Golden
         </motion.p>
@@ -98,7 +98,7 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4"
+          className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-4"
         >
           Bem-vindo à linha do tempo do Gohan! Acompanhe a incrível jornada do nosso amado golden retriever, desde seus adoráveis dias de filhote até o maravilhoso companheiro que ele é hoje.
         </motion.p>
@@ -110,7 +110,7 @@ export default function HeroSection() {
           rotate: [0, 5, 0]
         }}
         transition={{ duration: 4, repeat: Infinity }}
-        className="absolute top-10 left-4 sm:left-10 text-4xl sm:text-6xl opacity-5 select-none"
+        className="absolute top-6 sm:top-10 left-2 sm:left-4 md:left-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl opacity-5 select-none"
       >
         🐾
       </motion.div>
@@ -120,7 +120,7 @@ export default function HeroSection() {
           rotate: [0, -5, 0]
         }}
         transition={{ duration: 3, repeat: Infinity, delay: 1 }}
-        className="absolute bottom-10 right-4 sm:right-10 text-4xl sm:text-6xl opacity-5 select-none"
+        className="absolute bottom-6 sm:bottom-10 right-2 sm:right-4 md:right-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl opacity-5 select-none"
       >
         🐾
       </motion.div>
@@ -130,7 +130,7 @@ export default function HeroSection() {
           y: [0, -10, 0]
         }}
         transition={{ duration: 5, repeat: Infinity, delay: 2 }}
-        className="absolute top-1/2 right-10 sm:right-20 text-3xl sm:text-4xl opacity-5 select-none hidden sm:block"
+        className="absolute top-1/2 right-6 sm:right-10 md:right-20 text-2xl sm:text-3xl md:text-4xl opacity-5 select-none hidden sm:block"
       >
         🐾
       </motion.div>

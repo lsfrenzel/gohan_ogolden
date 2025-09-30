@@ -36,9 +36,10 @@ export default function MusicPlayer() {
         <Button
           onClick={handlePlay}
           size="icon"
-          className="fixed bottom-8 left-8 z-50 w-14 h-14 rounded-full shadow-2xl"
+          className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 md:bottom-8 md:left-8 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-2xl"
+          data-testid="button-music-play"
         >
-          <Volume2 className="w-6 h-6" />
+          <Volume2 className="w-5 h-5 sm:w-6 sm:h-6" />
         </Button>
       )}
     </>

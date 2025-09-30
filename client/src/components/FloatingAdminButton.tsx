@@ -14,19 +14,19 @@ export default function FloatingAdminButton({ onClick }: FloatingAdminButtonProp
       transition={{ delay: 1, type: "spring", stiffness: 200 }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
-      className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50"
+      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 z-50"
     >
       <Button
         onClick={onClick}
         size="icon"
-        className="w-14 h-14 sm:w-16 sm:h-16 rounded-full shadow-2xl relative overflow-hidden"
+        className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full shadow-2xl relative overflow-hidden"
         data-testid="button-admin-toggle"
       >
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         >
-          <Settings className="w-6 h-6 sm:w-7 sm:h-7" />
+          <Settings className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
         </motion.div>
       </Button>
     </motion.div>

@@ -37,9 +37,9 @@ export default function TimelineSection({ year, age, media, isFirst = false, onM
           initial={{ scale: 0 }}
           animate={isInView ? { scale: 1 } : { scale: 0 }}
           transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
-          className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-primary border-2 sm:border-[3px] md:border-4 border-background shadow-lg flex items-center justify-center ${isFirst ? '' : 'mt-6 sm:mt-8'}`}
+          className={`flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-primary border-2 sm:border-[3px] md:border-4 border-background shadow-lg flex items-center justify-center ${isFirst ? '' : 'mt-4 sm:mt-6 md:mt-8'}`}
         >
-          <span className="font-display text-lg sm:text-xl md:text-2xl font-bold text-primary-foreground">
+          <span className="font-display text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-primary-foreground">
             {year}
           </span>
         </motion.div>
@@ -51,23 +51,23 @@ export default function TimelineSection({ year, age, media, isFirst = false, onM
         />
       </div>
       
-      <div className="flex-1 pt-4 sm:pt-6">
+      <div className="flex-1 pt-3 sm:pt-4 md:pt-6">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mb-4 sm:mb-6"
+          className="mb-3 sm:mb-4 md:mb-6"
         >
-          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-1 sm:mb-2">
+          <h2 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-1 sm:mb-2">
             Ano {year}
           </h2>
-          <p className="font-heading text-base sm:text-lg md:text-xl text-muted-foreground">
+          <p className="font-heading text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground">
             {age}
           </p>
         </motion.div>
         
         {media.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
             {media.map((item, index) => (
               <motion.div
                 key={item.id}
@@ -100,9 +100,9 @@ export default function TimelineSection({ year, age, media, isFirst = false, onM
                       >
                         <motion.div 
                           whileHover={{ scale: 1.1 }}
-                          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-lg"
+                          className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-lg"
                         >
-                          <Play className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-primary-foreground ml-0.5 sm:ml-1" fill="currentColor" />
+                          <Play className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-primary-foreground ml-0.5 sm:ml-1" fill="currentColor" />
                         </motion.div>
                       </motion.div>
                     )}
@@ -117,18 +117,18 @@ export default function TimelineSection({ year, age, media, isFirst = false, onM
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <Card className="p-8 sm:p-10 md:p-12 text-center border-dashed">
+            <Card className="p-6 sm:p-8 md:p-10 lg:p-12 text-center border-dashed">
               <motion.div 
                 animate={{ 
                   rotate: [0, 10, -10, 0],
                   scale: [1, 1.1, 1]
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
-                className="text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4 opacity-20"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-2 sm:mb-3 md:mb-4 opacity-20"
               >
                 🐾
               </motion.div>
-              <p className="text-muted-foreground text-base sm:text-lg">
+              <p className="text-muted-foreground text-sm sm:text-base md:text-lg">
                 Ainda não há fotos - adicione as primeiras memórias do Gohan!
               </p>
             </Card>
