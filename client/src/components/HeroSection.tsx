@@ -53,7 +53,7 @@ export default function HeroSection() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-3 sm:mb-4"
         >
-          Gohan's Journey
+          Jornada do Gohan
         </motion.h1>
         
         <motion.p 
@@ -62,7 +62,7 @@ export default function HeroSection() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="font-heading text-xl sm:text-2xl md:text-3xl text-muted-foreground mb-4 sm:mb-6 px-4"
         >
-          A Golden Life Full of Love & Adventures
+          Gohan o golden retriever
         </motion.p>
         
         <motion.p 
@@ -71,7 +71,7 @@ export default function HeroSection() {
           transition={{ duration: 0.6, delay: 0.8 }}
           className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4"
         >
-          Welcome to Gohan's timeline! Follow the amazing journey of our beloved golden retriever, from his adorable puppy days to the wonderful companion he is today.
+          Bem-vindo à linha do tempo do Gohan! Acompanhe a incrível jornada do nosso amado golden retriever, desde seus adoráveis dias de filhote até o maravilhoso companheiro que ele é hoje.
         </motion.p>
       </motion.div>
       

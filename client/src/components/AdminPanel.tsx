@@ -120,10 +120,10 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
         <div className="flex items-center justify-between mb-6 sm:mb-8">
           <div>
             <h1 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-2">
-              Admin Panel
+              Painel de Administração
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground">
-              Upload new photos and videos to Gohan's timeline
+              Envie novas fotos e vídeos para a linha do tempo do Gohan
             </p>
           </div>
           <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.2 }}>
@@ -142,7 +142,7 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
           <div className="space-y-6">
             <div>
               <Label className="text-base font-semibold mb-3 block">
-                Select Year
+                Selecionar Ano
               </Label>
               <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                 {years.map((year, index) => (
@@ -167,7 +167,7 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
 
             <div>
               <Label className="text-base font-semibold mb-3 block">
-                Upload Photos & Videos
+                Enviar Fotos e Vídeos
               </Label>
               <motion.div
                 animate={{ 
@@ -202,10 +202,10 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
                   </motion.div>
                   <Upload className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-muted-foreground" />
                   <p className="text-base sm:text-lg font-medium text-foreground mb-2">
-                    Drop files here or click to upload
+                    Solte arquivos aqui ou clique para enviar
                   </p>
                   <p className="text-xs sm:text-sm text-muted-foreground">
-                    Support for images and videos
+                    Suporte para imagens e vídeos
                   </p>
                 </label>
               </motion.div>
@@ -219,7 +219,7 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
                   exit={{ opacity: 0, height: 0 }}
                 >
                   <Label className="text-base font-semibold mb-3 block">
-                    Selected Files ({files.length})
+                    Arquivos Selecionados ({files.length})
                   </Label>
                   <div className="space-y-2 max-h-48 overflow-y-auto">
                     {files.map((file, index) => (
@@ -257,17 +257,17 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
               {uploading ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary-foreground border-t-transparent mr-2"></div>
-                  Uploading...
+                  Enviando...
                 </>
               ) : uploadSuccess ? (
                 <>
                   <Check className="w-5 h-5 mr-2" />
-                  Upload Successful!
+                  Envio bem-sucedido!
                 </>
               ) : (
                 <>
                   <Upload className="w-5 h-5 mr-2" />
-                  Upload to Timeline
+                  Enviar para a Linha do Tempo
                 </>
               )}
             </Button>

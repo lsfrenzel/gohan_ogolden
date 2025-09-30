@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
@@ -6,6 +6,7 @@ import TimelineSection from "@/components/TimelineSection";
 import AdminPanel from "@/components/AdminPanel";
 import FloatingAdminButton from "@/components/FloatingAdminButton";
 import MusicPlayer from "@/components/MusicPlayer";
+import MediaLightbox from "@/components/MediaLightbox";
 import { queryClient } from "@/lib/queryClient";
 import type { Media } from "@shared/schema";
 
@@ -14,21 +15,56 @@ interface TimelineYear {
   media: Media[];
 }
 
+interface MediaItem {
+  id: string;
+  type: 'image' | 'video';
+  url: string;
+  thumbnail?: string;
+  year?: number;
+}
+
 const getAgeLabel = (year: number, birthYear = 2022) => {
   const age = year - birthYear;
-  if (age === 0) return "Year 0 - Welcome Home!";
-  if (age === 1) return "Year 1 - Puppy Days";
-  if (age === 2) return "Year 2 - Growing Strong";
-  if (age === 3) return "Year 3 - A Mature Companion";
-  return `Year ${age}`;
+  if (age === 0) return "Ano 0 - Bem-vindo ao Lar!";
+  if (age === 1) return "Ano 1 - Dias de Filhote";
+  if (age === 2) return "Ano 2 - Crescendo Forte";
+  if (age === 3) return "Ano 3 - Um Companheiro Maduro";
+  return `Ano ${age}`;
 };
 
 export default function Home() {
   const [showAdmin, setShowAdmin] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const { data: timeline, isLoading } = useQuery<TimelineYear[]>({
     queryKey: ['/api/timeline'],
   });
+
+  const allMedia = useMemo(() => {
+    if (!timeline) return [];
+    const media: MediaItem[] = [];
+    timeline.forEach(section => {
+      section.media.forEach(m => {
+        media.push({
+          id: m.id,
+          type: m.type as 'image' | 'video',
+          url: `/uploads/${m.filename}`,
+          thumbnail: m.type === 'video' ? `/uploads/${m.filename}` : undefined,
+          year: section.year
+        });
+      });
+    });
+    return media;
+  }, [timeline]);
+
+  const handleMediaClick = (mediaId: string) => {
+    const index = allMedia.findIndex(m => m.id === mediaId);
+    if (index !== -1) {
+      setLightboxIndex(index);
+      setLightboxOpen(true);
+    }
+  };
 
   const handleUploadSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ['/api/timeline'] });
@@ -70,6 +106,7 @@ export default function Home() {
                           thumbnail: m.type === 'video' ? `/uploads/${m.filename}` : undefined
                         }))}
                         isFirst={index === 0}
+                        onMediaClick={handleMediaClick}
                       />
                     ))
                   ) : (
@@ -92,6 +129,13 @@ export default function Home() {
           </div>
         )}
       </AnimatePresence>
+
+      <MediaLightbox
+        media={allMedia}
+        currentIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
     </div>
   );
 }

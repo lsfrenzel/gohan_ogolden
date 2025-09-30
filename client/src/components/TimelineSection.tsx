@@ -16,9 +16,10 @@ interface TimelineSectionProps {
   age: string;
   media: MediaItem[];
   isFirst?: boolean;
+  onMediaClick?: (mediaId: string) => void;
 }
 
-export default function TimelineSection({ year, age, media, isFirst = false }: TimelineSectionProps) {
+export default function TimelineSection({ year, age, media, isFirst = false, onMediaClick }: TimelineSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -58,7 +59,7 @@ export default function TimelineSection({ year, age, media, isFirst = false }: T
           className="mb-4 sm:mb-6"
         >
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-1 sm:mb-2">
-            Year {year}
+            Ano {year}
           </h2>
           <p className="font-heading text-base sm:text-lg md:text-xl text-muted-foreground">
             {age}
@@ -79,6 +80,7 @@ export default function TimelineSection({ year, age, media, isFirst = false }: T
                 <Card 
                   className="overflow-hidden hover-elevate active-elevate-2 cursor-pointer transition-all duration-300 group"
                   data-testid={`media-${item.id}`}
+                  onClick={() => onMediaClick?.(item.id)}
                 >
                   <div className="relative aspect-square">
                     <motion.img 
@@ -127,7 +129,7 @@ export default function TimelineSection({ year, age, media, isFirst = false }: T
                 🐾
               </motion.div>
               <p className="text-muted-foreground text-base sm:text-lg">
-                No photos yet - add Gohan's first memories!
+                Ainda não há fotos - adicione as primeiras memórias do Gohan!
               </p>
             </Card>
           </motion.div>
