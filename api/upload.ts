@@ -60,39 +60,69 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    // Check if BLOB_READ_WRITE_TOKEN is configured
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      console.error('BLOB_READ_WRITE_TOKEN not configured');
+      return res.status(500).json({ 
+        error: 'Vercel Blob não configurado. Configure BLOB_READ_WRITE_TOKEN nas variáveis de ambiente.' 
+      });
+    }
+
+    // Check if DATABASE_URL is configured
+    if (!process.env.DATABASE_URL) {
+      console.error('DATABASE_URL not configured');
+      return res.status(500).json({ 
+        error: 'Banco de dados não configurado. Configure DATABASE_URL nas variáveis de ambiente.' 
+      });
+    }
+
     const { files, year } = await parseMultipartForm(req);
 
     if (!files || files.length === 0) {
-      return res.status(400).json({ error: 'No files uploaded' });
+      return res.status(400).json({ error: 'Nenhum arquivo foi enviado' });
     }
+
+    console.log(`Uploading ${files.length} file(s) for year ${year}`);
 
     const allowedTypes = /jpeg|jpg|png|gif|mp4|mov|avi|webm/;
     
     const uploadedMedia = await Promise.all(
       files.map(async (file) => {
-        const ext = file.name.split('.').pop()?.toLowerCase() || '';
-        
-        if (!allowedTypes.test(ext) && !allowedTypes.test(file.type)) {
-          throw new Error(`Invalid file type: ${file.name}`);
+        try {
+          const ext = file.name.split('.').pop()?.toLowerCase() || '';
+          
+          if (!allowedTypes.test(ext) && !allowedTypes.test(file.type)) {
+            throw new Error(`Tipo de arquivo inválido: ${file.name}`);
+          }
+
+          console.log(`Uploading ${file.name} to Vercel Blob...`);
+          const blob = await put(file.name, file.data, {
+            access: 'public',
+            addRandomSuffix: true,
+          });
+          console.log(`Blob uploaded: ${blob.url}`);
+
+          const type = file.type.startsWith('image/') ? 'image' : 'video';
+          const mediaData = {
+            year,
+            filename: file.name,
+            url: blob.url,
+            type,
+          };
+
+          console.log(`Saving media metadata to database...`);
+          const savedMedia = await storage.createMedia(mediaData);
+          console.log(`Media saved with id: ${savedMedia.id}`);
+          
+          return savedMedia;
+        } catch (fileError) {
+          console.error(`Error processing file ${file.name}:`, fileError);
+          throw fileError;
         }
-
-        const blob = await put(file.name, file.data, {
-          access: 'public',
-          addRandomSuffix: true,
-        });
-
-        const type = file.type.startsWith('image/') ? 'image' : 'video';
-        const mediaData = {
-          year,
-          filename: file.name,
-          url: blob.url,
-          type,
-        };
-
-        return await storage.createMedia(mediaData);
       })
     );
 
+    console.log(`Successfully uploaded ${uploadedMedia.length} file(s)`);
     res.json({
       success: true,
       media: uploadedMedia,
@@ -100,8 +130,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   } catch (error) {
     console.error('Upload error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Falha ao fazer upload dos arquivos';
     res.status(500).json({ 
-      error: error instanceof Error ? error.message : 'Failed to upload files' 
+      error: errorMessage
     });
   }
 }

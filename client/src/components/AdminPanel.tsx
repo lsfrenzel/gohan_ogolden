@@ -72,11 +72,11 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error('Upload failed');
-      }
-
       const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Upload failed');
+      }
       
       setUploading(false);
       setUploadSuccess(true);
@@ -95,11 +95,13 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
       }, 1500);
     } catch (error) {
       setUploading(false);
+      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
       toast({
         title: "Erro no upload",
-        description: "Não foi possível fazer o upload dos arquivos. Tente novamente.",
+        description: errorMessage,
         variant: "destructive",
       });
+      console.error("Upload error:", error);
     }
   };
 
