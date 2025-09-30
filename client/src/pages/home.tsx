@@ -52,8 +52,8 @@ export default function Home() {
         media.push({
           id: m.id,
           type: m.type as 'image' | 'video',
-          url: `/uploads/${m.filename}`,
-          thumbnail: m.type === 'video' ? `/uploads/${m.filename}` : undefined,
+          url: m.url,
+          thumbnail: m.type === 'video' ? m.url : undefined,
           year: section.year
         });
       });
@@ -124,8 +124,8 @@ export default function Home() {
                         media={section.media.map(m => ({
                           id: m.id,
                           type: m.type as 'image' | 'video',
-                          url: `/uploads/${m.filename}`,
-                          thumbnail: m.type === 'video' ? `/uploads/${m.filename}` : undefined
+                          url: m.url,
+                          thumbnail: m.type === 'video' ? m.url : undefined
                         }))}
                         isFirst={index === 0}
                         onMediaClick={handleMediaClick}

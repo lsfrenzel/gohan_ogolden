@@ -7,6 +7,7 @@ export const media = pgTable("media", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   year: integer("year").notNull(),
   filename: text("filename").notNull(),
+  url: text("url").notNull(),
   type: text("type").notNull(), // 'image' or 'video'
   uploadedAt: text("uploaded_at").notNull(),
 });

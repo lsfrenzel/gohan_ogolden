@@ -83,6 +83,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const mediaData = {
             year,
             filename: file.filename,
+            url: `/uploads/${file.filename}`,
             type,
           };
 

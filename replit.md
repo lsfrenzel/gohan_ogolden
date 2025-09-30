@@ -155,3 +155,38 @@ Enhanced mobile experience across all components with better spacing, sizing, an
 - Better z-index management to prevent overlap
 
 All components now use comprehensive Tailwind breakpoints (sm, md, lg, xl) for smooth scaling across all device sizes.
+
+### Vercel Deployment Support (September 30, 2025)
+
+**Adapted for Vercel Hosting**
+The project now supports deployment on Vercel with automatic scalability for media files:
+
+**Architecture Changes**
+- ✅ Vercel Blob Storage integration for scalable file uploads (replaces local filesystem)
+- ✅ Serverless API functions in `/api` directory for Vercel compatibility
+- ✅ Updated schema to store blob URLs for cloud-hosted media
+- ✅ Dual-mode support: local development with filesystem, production with Vercel Blob
+- ✅ Database schema includes `url` field for flexible storage (local or cloud URLs)
+
+**Scalability Features**
+- Supports unlimited photos/videos through Vercel Blob (up to 5TB per file)
+- Automatic global CDN distribution for fast media delivery
+- Cost-effective: Free tier includes 1GB storage + 10GB transfer/month
+- Production-ready with automatic scaling based on usage
+
+**Deployment Files**
+- `vercel.json` - Vercel deployment configuration
+- `/api/*` - Serverless API functions for timeline, media, and uploads
+- `.env.example` - Environment variables documentation
+- `VERCEL_DEPLOYMENT.md` - Complete deployment guide with step-by-step instructions
+
+**Cost Estimation**
+- 100 photos (2MB each): Free tier
+- 1,000 photos: ~$0.05/month
+- 10,000 photos: ~$5-10/month
+- Unlimited scalability with transparent pricing
+
+**Development Experience**
+- Local development unchanged: `npm run dev` continues to work
+- Vercel CLI support: `vercel dev` for testing serverless functions locally
+- Hot Module Replacement (HMR) active in both modes
