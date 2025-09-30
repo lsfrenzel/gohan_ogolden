@@ -31,7 +31,36 @@ export default function HeroSection() {
 
   return (
     <div className="relative py-8 sm:py-12 md:py-16 lg:py-20 px-3 sm:px-4 md:px-6 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-card to-background opacity-80"></div>
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 animate-gradient opacity-90"></div>
+      
+      {/* Floating particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, Math.random() * 20 - 10, 0],
+              opacity: [0.1, 0.3, 0.1],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 4,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          >
+            <div className={`rounded-full ${i % 3 === 0 ? 'bg-amber-300' : i % 3 === 1 ? 'bg-orange-300' : 'bg-yellow-300'}`} 
+                 style={{ width: `${4 + Math.random() * 8}px`, height: `${4 + Math.random() * 8}px` }} />
+          </motion.div>
+        ))}
+      </div>
       
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
@@ -40,100 +69,208 @@ export default function HeroSection() {
         className="relative max-w-4xl mx-auto text-center"
       >
         <motion.div 
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-4 sm:mb-6 md:mb-8 flex justify-center"
+          initial={{ scale: 0.5, opacity: 0, rotateY: 180 }}
+          animate={{ scale: 1, opacity: 1, rotateY: 0 }}
+          transition={{ 
+            duration: 1.2, 
+            delay: 0.2,
+            type: "spring",
+            stiffness: 100
+          }}
+          className="mb-4 sm:mb-6 md:mb-8 flex justify-center perspective-1000"
         >
           <div className="relative group">
+            {/* Rotating gradient ring behind */}
             <motion.div
-              animate={{ 
-                boxShadow: [
-                  "0 0 20px rgba(218, 165, 32, 0.3)",
-                  "0 0 40px rgba(218, 165, 32, 0.5)",
-                  "0 0 20px rgba(218, 165, 32, 0.3)"
-                ]
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: "conic-gradient(from 0deg, #F59E0B, #FBBF24, #FCD34D, #F59E0B)",
               }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full overflow-hidden border-3 sm:border-4 md:border-[6px] lg:border-8 border-primary shadow-xl cursor-pointer"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+            />
+            
+            {/* Pulsing rings */}
+            {[0, 1, 2].map((i) => (
+              <motion.div
+                key={i}
+                className="absolute inset-0 rounded-full border-2 border-amber-400"
+                initial={{ scale: 1, opacity: 0.5 }}
+                animate={{ 
+                  scale: [1, 1.3, 1.6],
+                  opacity: [0.5, 0.2, 0]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  delay: i * 1,
+                  ease: "easeOut"
+                }}
+              />
+            ))}
+            
+            <motion.div
+              whileHover={{ 
+                scale: 1.05,
+                rotate: [0, -5, 5, 0],
+                transition: { duration: 0.5 }
+              }}
+              whileTap={{ scale: 0.95 }}
+              className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full overflow-hidden shadow-2xl cursor-pointer magical-glow"
+              style={{
+                background: "linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1))",
+                border: "4px solid transparent",
+                backgroundClip: "padding-box",
+              }}
               onClick={() => setIsLightboxOpen(true)}
             >
-              <img 
-                src={gohanImage} 
-                alt="Gohan the golden retriever" 
-                className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                data-testid="img-hero-gohan"
-              />
+              <div className="absolute inset-[3px] rounded-full overflow-hidden">
+                <motion.img 
+                  src={gohanImage} 
+                  alt="Gohan the golden retriever" 
+                  className="w-full h-full object-cover"
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.4 }}
+                  data-testid="img-hero-gohan"
+                />
+              </div>
             </motion.div>
+            
+            {/* Animated paw badge with bounce */}
             <motion.div 
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-              className="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 bg-primary text-primary-foreground rounded-full w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 flex items-center justify-center text-xl sm:text-2xl md:text-3xl shadow-lg"
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ 
+                scale: 1, 
+                rotate: 0,
+              }}
+              transition={{ 
+                delay: 0.8, 
+                type: "spring", 
+                stiffness: 200,
+                damping: 10
+              }}
+              whileHover={{ 
+                scale: 1.2,
+                rotate: [0, -10, 10, 0],
+                transition: { duration: 0.5 }
+              }}
+              className="absolute -bottom-2 -right-2 sm:-bottom-3 sm:-right-3 rounded-full w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 flex items-center justify-center text-xl sm:text-2xl md:text-3xl shadow-xl cursor-pointer"
+              style={{
+                background: "linear-gradient(135deg, #F59E0B, #FBBF24)",
+                boxShadow: "0 0 30px rgba(245, 158, 11, 0.6), 0 10px 30px rgba(0, 0, 0, 0.2)"
+              }}
             >
-              🐾
+              <motion.div
+                animate={{ 
+                  rotate: [0, 10, -10, 0],
+                  scale: [1, 1.1, 1]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                🐾
+              </motion.div>
             </motion.div>
           </div>
         </motion.div>
         
         <motion.h1 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-2 sm:mb-3 md:mb-4"
+          initial={{ opacity: 0, y: 30, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ 
+            duration: 0.8, 
+            delay: 0.5,
+            type: "spring",
+            stiffness: 100
+          }}
+          className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-2 sm:mb-3 md:mb-4 relative"
+          style={{
+            background: "linear-gradient(135deg, #92400E, #F59E0B, #FBBF24, #F59E0B, #92400E)",
+            backgroundSize: "200% auto",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}
         >
-          Jornada do Gohan
+          <motion.span
+            animate={{
+              backgroundPosition: ["0% center", "200% center"],
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            style={{
+              background: "linear-gradient(135deg, #92400E, #F59E0B, #FBBF24, #F59E0B, #92400E)",
+              backgroundSize: "200% auto",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              display: "inline-block"
+            }}
+          >
+            Jornada do Gohan
+          </motion.span>
         </motion.h1>
         
         <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="font-heading text-lg sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground mb-3 sm:mb-4 md:mb-6 px-4"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+          className="font-heading text-lg sm:text-xl md:text-2xl lg:text-3xl text-amber-700 mb-3 sm:mb-4 md:mb-6 px-4 font-semibold"
         >
-          Gohan, O Golden
+          <motion.span
+            animate={{ 
+              textShadow: [
+                "0 0 10px rgba(245, 158, 11, 0.3)",
+                "0 0 20px rgba(245, 158, 11, 0.5)",
+                "0 0 10px rgba(245, 158, 11, 0.3)"
+              ]
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            Gohan, O Golden
+          </motion.span>
         </motion.p>
         
         <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
+          className="text-sm sm:text-base md:text-lg text-amber-800/80 max-w-2xl mx-auto px-4 leading-relaxed"
         >
           Bem-vindo à linha do tempo do Gohan! Acompanhe a incrível jornada do nosso amado golden retriever, desde seus adoráveis dias de filhote até o maravilhoso companheiro que ele é hoje.
         </motion.p>
       </motion.div>
       
-      <motion.div 
-        animate={{ 
-          opacity: [0.05, 0.08, 0.05],
-          rotate: [0, 5, 0]
-        }}
-        transition={{ duration: 4, repeat: Infinity }}
-        className="absolute top-6 sm:top-10 left-2 sm:left-4 md:left-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl opacity-5 select-none"
-      >
-        🐾
-      </motion.div>
-      <motion.div 
-        animate={{ 
-          opacity: [0.05, 0.08, 0.05],
-          rotate: [0, -5, 0]
-        }}
-        transition={{ duration: 3, repeat: Infinity, delay: 1 }}
-        className="absolute bottom-6 sm:bottom-10 right-2 sm:right-4 md:right-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl opacity-5 select-none"
-      >
-        🐾
-      </motion.div>
-      <motion.div 
-        animate={{ 
-          opacity: [0.05, 0.08, 0.05],
-          y: [0, -10, 0]
-        }}
-        transition={{ duration: 5, repeat: Infinity, delay: 2 }}
-        className="absolute top-1/2 right-6 sm:right-10 md:right-20 text-2xl sm:text-3xl md:text-4xl opacity-5 select-none hidden sm:block"
-      >
-        🐾
-      </motion.div>
+      {/* Animated decorative paws */}
+      {[
+        { top: '10%', left: '5%', delay: 0, duration: 5 },
+        { top: '20%', right: '8%', delay: 1, duration: 6 },
+        { top: '70%', left: '10%', delay: 2, duration: 7 },
+        { bottom: '15%', right: '5%', delay: 1.5, duration: 5.5 },
+      ].map((pos, i) => (
+        <motion.div
+          key={i}
+          className="absolute text-4xl sm:text-5xl md:text-6xl select-none pointer-events-none"
+          style={{ ...pos }}
+          initial={{ opacity: 0, scale: 0, rotate: -180 }}
+          animate={{ 
+            opacity: [0, 0.15, 0],
+            scale: [0, 1.2, 0.8, 1],
+            rotate: [0, 360],
+            y: [0, -30, 0],
+          }}
+          transition={{
+            duration: pos.duration,
+            repeat: Infinity,
+            delay: pos.delay,
+            ease: "easeInOut"
+          }}
+        >
+          🐾
+        </motion.div>
+      ))}
       
       <MediaLightbox
         media={heroMedia}
