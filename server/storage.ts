@@ -90,7 +90,8 @@ export class DBStorage implements IStorage {
   }
 }
 
-const isDevelopment = process.env.NODE_ENV === "development";
-const useDatabase = process.env.DATABASE_URL && !isDevelopment;
+// Use database if DATABASE_URL is available (Vercel production)
+// Use in-memory storage only for local development without DATABASE_URL
+const useDatabase = !!process.env.DATABASE_URL;
 
 export const storage = useDatabase ? new DBStorage() : new MemStorage();
