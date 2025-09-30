@@ -19,7 +19,7 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const { toast } = useToast();
 
-  const years = Array.from({ length: 9 }, (_, i) => 2022 + i); // 2022 to 2030
+  const years = Array.from({ length: 10 }, (_, i) => 2022 + i); // 2022 to 2031
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -144,21 +144,49 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
               <Label className="text-sm sm:text-base font-semibold mb-2 sm:mb-3 block">
                 Selecionar Ano
               </Label>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 sm:gap-3">
                 {years.map((year, index) => (
                   <motion.div
                     key={year}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: index * 0.05 }}
+                    initial={{ opacity: 0, scale: 0.5, rotateY: -180 }}
+                    animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                    transition={{ 
+                      delay: index * 0.06,
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 15
+                    }}
+                    whileHover={{ 
+                      scale: 1.08,
+                      y: -4,
+                      transition: { duration: 0.3 }
+                    }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     <Button
                       variant={selectedYear === year ? "default" : "outline"}
                       onClick={() => setSelectedYear(year)}
-                      className="w-full font-display text-sm sm:text-base md:text-lg py-2 sm:py-2.5"
+                      className="w-full font-display text-sm sm:text-base md:text-lg py-2 sm:py-2.5 relative overflow-hidden transition-all duration-300"
                       data-testid={`button-year-${year}`}
+                      style={{
+                        boxShadow: selectedYear === year 
+                          ? "0 10px 30px rgba(245, 158, 11, 0.4), 0 0 20px rgba(245, 158, 11, 0.3)" 
+                          : "none"
+                      }}
                     >
-                      {year}
+                      {selectedYear === year && (
+                        <motion.div
+                          layoutId="yearSelectedBg"
+                          className="absolute inset-0"
+                          style={{
+                            background: "linear-gradient(135deg, #F59E0B, #FBBF24)"
+                          }}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.3 }}
+                        />
+                      )}
+                      <span className="relative z-10">{year}</span>
                     </Button>
                   </motion.div>
                 ))}
@@ -171,15 +199,56 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
               </Label>
               <motion.div
                 animate={{ 
-                  borderColor: dragActive ? "hsl(var(--primary))" : "hsl(var(--border))",
-                  backgroundColor: dragActive ? "hsl(var(--primary) / 0.05)" : "transparent"
+                  borderColor: dragActive ? "rgba(245, 158, 11, 0.6)" : "hsl(var(--border))",
+                  backgroundColor: dragActive ? "rgba(245, 158, 11, 0.08)" : "transparent",
+                  scale: dragActive ? 1.02 : 1
                 }}
-                className="border-2 border-dashed rounded-xl p-6 sm:p-8 md:p-12 text-center transition-colors"
+                transition={{ duration: 0.3 }}
+                className="border-2 border-dashed rounded-xl p-6 sm:p-8 md:p-12 text-center relative overflow-hidden group"
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
                 onDragOver={handleDrag}
                 onDrop={handleDrop}
+                style={{
+                  boxShadow: dragActive ? "0 0 40px rgba(245, 158, 11, 0.3)" : "none"
+                }}
               >
+                {/* Animated background pattern */}
+                <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+                  <motion.div
+                    className="w-full h-full"
+                    style={{
+                      backgroundImage: `repeating-linear-gradient(45deg, #F59E0B 0, #F59E0B 10px, transparent 10px, transparent 20px)`,
+                    }}
+                    animate={{
+                      backgroundPosition: dragActive ? ["0px 0px", "40px 40px"] : "0px 0px"
+                    }}
+                    transition={{ duration: 1, repeat: dragActive ? Infinity : 0, ease: "linear" }}
+                  />
+                </div>
+
+                {/* Floating paw prints */}
+                {dragActive && [0, 1, 2].map((i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute text-2xl sm:text-3xl"
+                    initial={{ x: `${30 + i * 20}%`, y: "100%", opacity: 0, rotate: 0 }}
+                    animate={{ 
+                      y: "-100%",
+                      opacity: [0, 0.4, 0],
+                      rotate: 360
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      delay: i * 0.3,
+                      ease: "linear"
+                    }}
+                  >
+                    🐾
+                  </motion.div>
+                ))}
+
                 <input
                   type="file"
                   id="file-upload"
@@ -190,20 +259,38 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
                 />
                 <label 
                   htmlFor="file-upload" 
-                  className="cursor-pointer"
+                  className="cursor-pointer relative z-10"
                   data-testid="label-file-upload"
                 >
                   <motion.div 
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    animate={{ 
+                      rotate: [0, 10, -10, 0],
+                      scale: dragActive ? [1, 1.2, 1] : 1
+                    }}
+                    transition={{ 
+                      rotate: { duration: 2, repeat: Infinity },
+                      scale: { duration: 0.5 }
+                    }}
                     className="text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4 opacity-40"
                   >
                     🐾
                   </motion.div>
-                  <Upload className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mx-auto mb-3 sm:mb-4 text-muted-foreground" />
-                  <p className="text-sm sm:text-base md:text-lg font-medium text-foreground mb-1 sm:mb-2">
-                    Solte arquivos aqui ou clique para enviar
-                  </p>
+                  <motion.div
+                    animate={{ 
+                      y: dragActive ? [0, -10, 0] : 0
+                    }}
+                    transition={{ duration: 0.8, repeat: dragActive ? Infinity : 0 }}
+                  >
+                    <Upload className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mx-auto mb-3 sm:mb-4 text-muted-foreground" />
+                  </motion.div>
+                  <motion.p 
+                    animate={{
+                      color: dragActive ? "rgb(245, 158, 11)" : "hsl(var(--foreground))"
+                    }}
+                    className="text-sm sm:text-base md:text-lg font-medium mb-1 sm:mb-2"
+                  >
+                    {dragActive ? "Solte os arquivos aqui!" : "Solte arquivos aqui ou clique para enviar"}
+                  </motion.p>
                   <p className="text-xs sm:text-sm text-muted-foreground">
                     Suporte para imagens e vídeos
                   </p>
@@ -248,29 +335,64 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
               )}
             </AnimatePresence>
 
-            <Button
-              onClick={handleUpload}
-              disabled={!selectedYear || files.length === 0 || uploading}
-              className="w-full text-sm sm:text-base md:text-lg py-4 sm:py-5 md:py-6"
-              data-testid="button-upload"
+            <motion.div
+              whileHover={{ scale: (!selectedYear || files.length === 0 || uploading) ? 1 : 1.02 }}
+              whileTap={{ scale: (!selectedYear || files.length === 0 || uploading) ? 1 : 0.98 }}
             >
-              {uploading ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary-foreground border-t-transparent mr-2"></div>
-                  Enviando...
-                </>
-              ) : uploadSuccess ? (
-                <>
-                  <Check className="w-5 h-5 mr-2" />
-                  Envio bem-sucedido!
-                </>
-              ) : (
-                <>
-                  <Upload className="w-5 h-5 mr-2" />
-                  Enviar para a Linha do Tempo
-                </>
-              )}
-            </Button>
+              <Button
+                onClick={handleUpload}
+                disabled={!selectedYear || files.length === 0 || uploading}
+                className="w-full text-sm sm:text-base md:text-lg py-4 sm:py-5 md:py-6 relative overflow-hidden"
+                data-testid="button-upload"
+                style={{
+                  background: uploadSuccess 
+                    ? "linear-gradient(135deg, #10B981, #059669)" 
+                    : "linear-gradient(135deg, #F59E0B, #FBBF24)"
+                }}
+              >
+                {uploading && (
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                    animate={{ x: ["-100%", "200%"] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                  />
+                )}
+                
+                <span className="relative z-10 flex items-center justify-center">
+                  {uploading ? (
+                    <>
+                      <motion.div 
+                        className="rounded-full h-5 w-5 border-2 border-primary-foreground border-t-transparent mr-2"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      />
+                      Enviando...
+                    </>
+                  ) : uploadSuccess ? (
+                    <>
+                      <motion.div
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ type: "spring", stiffness: 200 }}
+                      >
+                        <Check className="w-5 h-5 mr-2" />
+                      </motion.div>
+                      Envio bem-sucedido!
+                    </>
+                  ) : (
+                    <>
+                      <motion.div
+                        animate={{ y: [0, -3, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <Upload className="w-5 h-5 mr-2" />
+                      </motion.div>
+                      Enviar para a Linha do Tempo
+                    </>
+                  )}
+                </span>
+              </Button>
+            </motion.div>
           </div>
         </Card>
       </motion.div>
