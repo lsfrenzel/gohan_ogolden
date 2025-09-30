@@ -40,8 +40,12 @@ export default function HeroSection() {
         nextBirthday = new Date(now.getFullYear() + 1, 1, 11);
       }
       
-      const diffTime = nextBirthday.getTime() - now.getTime();
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      // Set to start of day for accurate day count
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const birthdayStart = new Date(nextBirthday.getFullYear(), nextBirthday.getMonth(), nextBirthday.getDate());
+      
+      const diffTime = birthdayStart.getTime() - todayStart.getTime();
+      const diffDays = Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
       setDaysUntilBirthday(diffDays);
     };
 
