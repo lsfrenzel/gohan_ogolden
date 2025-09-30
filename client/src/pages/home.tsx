@@ -4,6 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import TimelineSection from "@/components/TimelineSection";
 import AdminPanel from "@/components/AdminPanel";
+import AdminLogin from "@/components/AdminLogin";
 import FloatingAdminButton from "@/components/FloatingAdminButton";
 import MusicPlayer from "@/components/MusicPlayer";
 import MediaLightbox from "@/components/MediaLightbox";
@@ -33,6 +34,8 @@ const getAgeLabel = (year: number, birthYear = 2022) => {
 };
 
 export default function Home() {
+  const [showLogin, setShowLogin] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -70,13 +73,32 @@ export default function Home() {
     queryClient.invalidateQueries({ queryKey: ['/api/timeline'] });
   };
 
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+    setShowLogin(false);
+    setShowAdmin(true);
+  };
+
+  const handleCloseAdmin = () => {
+    setShowAdmin(false);
+    setIsAuthenticated(false);
+  };
+
+  const handleCloseLogin = () => {
+    setShowLogin(false);
+  };
+
+  const handleOpenLogin = () => {
+    setShowLogin(true);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <AnimatePresence mode="wait">
         {showAdmin ? (
           <AdminPanel 
             key="admin"
-            onClose={() => setShowAdmin(false)}
+            onClose={handleCloseAdmin}
             onUploadSuccess={handleUploadSuccess}
           />
         ) : (
@@ -124,9 +146,18 @@ export default function Home() {
               )}
             </div>
 
-            <FloatingAdminButton onClick={() => setShowAdmin(true)} />
+            <FloatingAdminButton onClick={handleOpenLogin} />
             <MusicPlayer />
           </div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showLogin && (
+          <AdminLogin
+            onClose={handleCloseLogin}
+            onLoginSuccess={handleLoginSuccess}
+          />
         )}
       </AnimatePresence>
 
