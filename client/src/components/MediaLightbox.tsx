@@ -69,7 +69,10 @@ export default function MediaLightbox({ media, currentIndex, isOpen, onClose }: 
         <div className="relative w-full h-full">
           {/* Botão fechar */}
           <Button
-            onClick={onClose}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
             size="icon"
             variant="ghost"
             className="absolute top-3 right-3 sm:top-4 sm:right-4 z-[100] text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-md bg-black/50 rounded-full w-11 h-11 sm:w-12 sm:h-12 border border-white/20 transition-all duration-200 hover:scale-110"
@@ -82,7 +85,10 @@ export default function MediaLightbox({ media, currentIndex, isOpen, onClose }: 
           {media.length > 1 && (
             <>
               <Button
-                onClick={goToPrevious}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goToPrevious();
+                }}
                 size="icon"
                 variant="ghost"
                 className="absolute left-2 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 z-[100] text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-md bg-black/50 rounded-full w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 border border-white/20 transition-all duration-200 hover:scale-110 shadow-2xl"
@@ -93,7 +99,10 @@ export default function MediaLightbox({ media, currentIndex, isOpen, onClose }: 
               </Button>
 
               <Button
-                onClick={goToNext}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goToNext();
+                }}
                 size="icon"
                 variant="ghost"
                 className="absolute right-2 sm:right-4 md:right-6 top-1/2 -translate-y-1/2 z-[100] text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-md bg-black/50 rounded-full w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 border border-white/20 transition-all duration-200 hover:scale-110 shadow-2xl"
