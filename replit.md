@@ -193,3 +193,75 @@ The project now supports deployment on Vercel with automatic scalability for med
 - Local development unchanged: `npm run dev` continues to work
 - Vercel CLI support: `vercel dev` for testing serverless functions locally
 - Hot Module Replacement (HMR) active in both modes
+
+### Railway Deployment Support (September 30, 2025)
+
+**Adaptado para Hospedagem no Railway**
+O projeto agora está totalmente configurado para deploy no Railway com PostgreSQL integrado:
+
+**Configuração Railway**
+- ✅ `railway.json` - Arquivo de configuração do Railway com build e deploy commands
+- ✅ `.env.example` - Documentação completa de variáveis de ambiente
+- ✅ `.gitignore` atualizado para proteger arquivos .env
+- ✅ Código compatível: servidor usa `0.0.0.0:PORT` e `DATABASE_URL` do ambiente
+- ✅ Scripts otimizados: `npm run build` (Vite + ESBuild) e `npm run start` (produção)
+
+**Como fazer Deploy no Railway**
+
+1. **Criar conta no Railway**
+   - Acesse [railway.app](https://railway.app)
+   - Faça login com GitHub
+
+2. **Criar novo projeto**
+   - Clique em "New Project"
+   - Selecione "Deploy from GitHub repo"
+   - Escolha o repositório do projeto
+   - Railway detecta automaticamente Node.js e faz o build
+
+3. **Adicionar PostgreSQL**
+   - No dashboard do projeto, clique no botão "+"
+   - Selecione "Database" → "Add PostgreSQL"
+   - Railway cria automaticamente a variável `DATABASE_URL`
+
+4. **Configurar Variáveis de Ambiente**
+   - No serviço da aplicação, vá em "Variables"
+   - Adicione: `DATABASE_URL` = `${{Postgres.DATABASE_URL}}`
+   - Adicione: `NODE_ENV` = `production`
+   - `PORT` é configurado automaticamente pelo Railway
+
+5. **Migrar o Schema do Banco**
+   - Instale Railway CLI: `npm install -g @railway/cli`
+   - Faça login: `railway login`
+   - Vincule o projeto: `railway link`
+   - Execute: `railway run npm run db:push`
+
+6. **Gerar Domínio Público**
+   - No serviço, vá em "Settings"
+   - Role até "Networking"
+   - Clique em "Generate Domain"
+   - Seu site estará disponível em: `[nome-projeto].up.railway.app`
+
+**Arquivos Importantes**
+- `railway.json` - Configuração de build e deploy
+- `.env.example` - Template de variáveis de ambiente
+- `server/storage.ts` - Detecta automaticamente DATABASE_URL e usa PostgreSQL
+
+**Custos Railway**
+- Plano gratuito: $5 em créditos mensais
+- Uso típico: ~$2-5/mês para pequenos projetos
+- PostgreSQL incluído sem custo adicional
+- Rede privada entre serviços (sem custos de egress)
+
+**Armazenamento de Arquivos**
+- No Railway, os uploads ficam no diretório `uploads/` local
+- Para persistência de arquivos após redeploys, considere:
+  - Railway Volumes (armazenamento persistente)
+  - Serviços externos como Cloudinary ou AWS S3
+  - Por padrão, arquivos em `uploads/` são temporários
+
+**Compatibilidade Total**
+- ✅ Express server configurado para 0.0.0.0
+- ✅ Porta dinâmica via process.env.PORT
+- ✅ PostgreSQL via DATABASE_URL
+- ✅ Build otimizado (Vite + ESBuild)
+- ✅ Processo de restart automático configurado
