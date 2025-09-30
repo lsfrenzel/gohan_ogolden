@@ -1,4 +1,4 @@
-import gohanImage from "@assets/generated_images/Golden_retriever_hero_portrait_6a2efb2c.png";
+import gohanImage from "@assets/gohan_1759242750019.jpg";
 import { motion } from "framer-motion";
 
 export default function HeroSection() {
