@@ -120,13 +120,19 @@ export default function MediaLightbox({ media, currentIndex, isOpen, onClose }: 
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="w-full h-full flex items-center justify-center px-20 py-16"
+              className="absolute inset-0 flex items-center justify-center p-4 sm:p-8"
+              style={{ 
+                paddingTop: '4rem',
+                paddingBottom: '5rem',
+                paddingLeft: 'max(1rem, 5vw)',
+                paddingRight: 'max(1rem, 5vw)'
+              }}
             >
               {currentMedia.type === 'image' ? (
                 <img
                   src={currentMedia.url}
                   alt={`Gohan ${currentMedia.year || ''}`}
-                  className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+                  className="w-auto h-auto max-w-full max-h-full object-contain rounded-lg shadow-2xl"
                   data-testid={`img-lightbox-${index}`}
                 />
               ) : (
@@ -135,7 +141,7 @@ export default function MediaLightbox({ media, currentIndex, isOpen, onClose }: 
                   controls
                   autoPlay
                   loop
-                  className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+                  className="w-auto h-auto max-w-full max-h-full object-contain rounded-lg shadow-2xl"
                   data-testid={`video-lightbox-${index}`}
                 />
               )}
