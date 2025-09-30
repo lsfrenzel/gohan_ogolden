@@ -60,12 +60,12 @@ export default function MediaLightbox({ media, currentIndex, isOpen, onClose }: 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[95vw] w-full h-[95vh] p-0 bg-black/98 border-none overflow-hidden">
-        <div className="relative w-full h-full">
+        <div className="relative w-full h-full pointer-events-none">
           <Button
             onClick={onClose}
             size="icon"
             variant="ghost"
-            className="absolute top-4 right-4 z-[200] text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-md bg-black/40 rounded-full w-12 h-12 border border-white/20 transition-all duration-200 hover:scale-110"
+            className="absolute top-4 right-4 z-[9999] text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-md bg-black/40 rounded-full w-12 h-12 border border-white/20 transition-all duration-200 hover:scale-110 pointer-events-auto"
             data-testid="button-close-lightbox"
           >
             <X className="w-6 h-6" />
@@ -77,7 +77,7 @@ export default function MediaLightbox({ media, currentIndex, isOpen, onClose }: 
                 onClick={goToPrevious}
                 size="icon"
                 variant="ghost"
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-[200] text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-md bg-black/40 rounded-full w-14 h-14 sm:w-16 sm:h-16 border border-white/20 transition-all duration-200 hover:scale-110 shadow-2xl"
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-[9999] text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-md bg-black/40 rounded-full w-14 h-14 sm:w-16 sm:h-16 border border-white/20 transition-all duration-200 hover:scale-110 shadow-2xl pointer-events-auto"
                 data-testid="button-previous-media"
               >
                 <ChevronLeft className="w-8 h-8 sm:w-10 sm:h-10" />
@@ -87,7 +87,7 @@ export default function MediaLightbox({ media, currentIndex, isOpen, onClose }: 
                 onClick={goToNext}
                 size="icon"
                 variant="ghost"
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-[200] text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-md bg-black/40 rounded-full w-14 h-14 sm:w-16 sm:h-16 border border-white/20 transition-all duration-200 hover:scale-110 shadow-2xl"
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-[9999] text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-md bg-black/40 rounded-full w-14 h-14 sm:w-16 sm:h-16 border border-white/20 transition-all duration-200 hover:scale-110 shadow-2xl pointer-events-auto"
                 data-testid="button-next-media"
               >
                 <ChevronRight className="w-8 h-8 sm:w-10 sm:h-10" />
