@@ -6,6 +6,7 @@ import TimelineSection from "@/components/TimelineSection";
 import AdminPanel from "@/components/AdminPanel";
 import AdminLogin from "@/components/AdminLogin";
 import FloatingAdminButton from "@/components/FloatingAdminButton";
+import InstagramButton from "@/components/InstagramButton";
 import MusicPlayer from "@/components/MusicPlayer";
 import MediaLightbox from "@/components/MediaLightbox";
 import { queryClient } from "@/lib/queryClient";
@@ -147,6 +148,7 @@ export default function Home() {
             </div>
 
             <FloatingAdminButton onClick={handleOpenLogin} />
+            <InstagramButton />
             <MusicPlayer />
           </div>
         )}
