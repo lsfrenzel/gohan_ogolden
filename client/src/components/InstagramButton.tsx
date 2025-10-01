@@ -37,17 +37,16 @@ export default function InstagramButton() {
       <div className="flex items-center gap-2">
         <motion.div
           whileHover={{ 
-            scale: 1.15,
+            scale: 1.2,
             rotate: [0, 5, -5, 0],
             transition: { duration: 0.5 }
           }}
-          whileTap={{ scale: 0.9 }}
+          whileTap={{ scale: 0.85 }}
           className="relative"
         >
           <Button
             asChild
-            size="icon"
-            className="w-16 h-16 rounded-full shadow-2xl relative overflow-hidden border-none cursor-pointer touch-manipulation"
+            className="w-16 h-16 min-w-16 min-h-16 shrink-0 p-0 rounded-full shadow-2xl relative overflow-hidden border-none cursor-pointer touch-manipulation"
             data-testid="button-instagram"
             style={{
               background: "linear-gradient(135deg, #833AB4, #FD1D1D, #F56040, #FCAF45)",
@@ -91,7 +90,7 @@ export default function InstagramButton() {
                 }}
               >
                 <SiInstagram 
-                  className="w-7 h-7 text-white" 
+                  className="w-8 h-8 text-white" 
                   style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }} 
                 />
               </motion.div>

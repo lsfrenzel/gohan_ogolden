@@ -44,8 +44,7 @@ export default function FloatingAdminButton({ onClick }: FloatingAdminButtonProp
       >
         <Button
           onClick={onClick}
-          size="icon"
-          className="w-16 h-16 rounded-full shadow-2xl relative overflow-hidden border-none"
+          className="w-16 h-16 min-w-16 min-h-16 shrink-0 p-0 rounded-full shadow-2xl relative overflow-hidden border-none"
           data-testid="button-admin-toggle"
           style={{
             background: "linear-gradient(135deg, #F59E0B, #FBBF24, #F59E0B)",
