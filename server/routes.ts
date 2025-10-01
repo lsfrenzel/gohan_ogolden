@@ -162,6 +162,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Delete media
+  app.delete("/api/media/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      if (isDevelopment) {
+        console.log(`[DELETE] Request to delete media: ${id}`);
+      }
+
+      // First, get the media to find the filename
+      const media = await storage.getMediaById(id);
+      
+      if (!media) {
+        if (isDevelopment) console.error(`[DELETE] Media not found: ${id}`);
+        return res.status(404).json({ error: "Mídia não encontrada" });
+      }
+
+      // Delete from storage (database or memory)
+      await storage.deleteMedia(id);
+      
+      // Delete the physical file
+      const filePath = path.join(uploadsDir, media.filename);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        if (isDevelopment) {
+          console.log(`[DELETE] Deleted file: ${media.filename}`);
+        }
+      }
+
+      if (isDevelopment) {
+        console.log(`[DELETE] Successfully deleted media: ${id}`);
+      }
+
+      res.json({ success: true, message: "Mídia excluída com sucesso" });
+    } catch (error) {
+      console.error("[DELETE] Error deleting media:", error);
+      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
+      res.status(500).json({ 
+        error: "Falha ao excluir mídia", 
+        details: isDevelopment ? errorMessage : undefined
+      });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

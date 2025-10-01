@@ -8,6 +8,8 @@ export interface IStorage {
   getMediaByYear(year: number): Promise<Media[]>;
   getAllMedia(): Promise<Media[]>;
   getYears(): Promise<number[]>;
+  getMediaById(id: string): Promise<Media | null>;
+  deleteMedia(id: string): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
@@ -42,6 +44,14 @@ export class MemStorage implements IStorage {
   async getYears(): Promise<number[]> {
     const years = new Set(Array.from(this.media.values()).map(m => m.year));
     return Array.from(years).sort((a, b) => b - a);
+  }
+
+  async getMediaById(id: string): Promise<Media | null> {
+    return this.media.get(id) || null;
+  }
+
+  async deleteMedia(id: string): Promise<void> {
+    this.media.delete(id);
   }
 }
 
@@ -87,6 +97,22 @@ export class DBStorage implements IStorage {
       .orderBy(desc(media.year));
     
     return result.map((r: { year: number }) => r.year);
+  }
+
+  async getMediaById(id: string): Promise<Media | null> {
+    const db = getDb();
+    const result = await db
+      .select()
+      .from(media)
+      .where(eq(media.id, id))
+      .limit(1);
+    
+    return result[0] || null;
+  }
+
+  async deleteMedia(id: string): Promise<void> {
+    const db = getDb();
+    await db.delete(media).where(eq(media.id, id));
   }
 }
 

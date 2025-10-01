@@ -1,10 +1,13 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Upload, X, Check } from "lucide-react";
+import { Upload, X, Check, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { queryClient, apiRequest } from "@/lib/queryClient";
+import type { Media } from "@shared/schema";
 
 interface AdminPanelProps {
   onClose: () => void;
@@ -20,6 +23,35 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
   const { toast } = useToast();
 
   const years = Array.from({ length: 10 }, (_, i) => 2022 + i); // 2022 to 2031
+
+  // Fetch media for selected year
+  const { data: yearMedia = [] } = useQuery<Media[]>({
+    queryKey: ['/api/media', selectedYear],
+    enabled: !!selectedYear,
+  });
+
+  // Delete media mutation
+  const deleteMediaMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const result = await apiRequest('DELETE', `/api/media/${id}`);
+      return result;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/media', selectedYear] });
+      queryClient.invalidateQueries({ queryKey: ['/api/timeline'] });
+      toast({
+        title: "Mídia excluída!",
+        description: "A foto/vídeo foi removida com sucesso.",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Erro ao excluir",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -339,6 +371,62 @@ export default function AdminPanel({ onClose, onUploadSuccess }: AdminPanelProps
                         >
                           <X className="w-3 h-3 sm:w-4 sm:h-4" />
                         </Button>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Manage existing media for selected year */}
+            <AnimatePresence>
+              {selectedYear && yearMedia.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                >
+                  <Label className="text-sm sm:text-base font-semibold mb-2 sm:mb-3 block">
+                    Mídias de {selectedYear} ({yearMedia.length})
+                  </Label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3 max-h-60 sm:max-h-72 overflow-y-auto">
+                    {yearMedia.map((media, index) => (
+                      <motion.div
+                        key={media.id}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        transition={{ delay: index * 0.03 }}
+                        className="relative group aspect-square rounded-lg overflow-hidden bg-muted"
+                      >
+                        {media.type === 'image' ? (
+                          <img 
+                            src={media.url} 
+                            alt={`Media ${media.id}`}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <video 
+                            src={media.url}
+                            className="w-full h-full object-cover"
+                          />
+                        )}
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          whileHover={{ opacity: 1 }}
+                          className="absolute inset-0 bg-black/60 flex items-center justify-center"
+                        >
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            onClick={() => deleteMediaMutation.mutate(media.id)}
+                            disabled={deleteMediaMutation.isPending}
+                            className="h-8 w-8 sm:h-10 sm:w-10"
+                            data-testid={`button-delete-${media.id}`}
+                          >
+                            <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                          </Button>
+                        </motion.div>
                       </motion.div>
                     ))}
                   </div>
