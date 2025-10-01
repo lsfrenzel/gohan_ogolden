@@ -11,15 +11,15 @@ export default function InstagramButton() {
       initial={{ scale: 0, opacity: 0, rotate: -180 }}
       animate={{ scale: 1, opacity: 1, rotate: 0 }}
       transition={{ delay: 1.4, type: "spring", stiffness: 150, damping: 12 }}
-      className="fixed bottom-5 left-5 sm:bottom-6 sm:left-6 md:bottom-8 md:left-8 z-50"
+      className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 md:bottom-8 md:left-8 z-50"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Pulsing rings effect - reduzido em mobile */}
-      {[0, 1].map((i) => (
+      {/* Pulsing rings effect */}
+      {[0, 1, 2].map((i) => (
         <motion.div
           key={i}
-          className="absolute inset-0 rounded-full border-2 border-pink-400/30 hidden sm:block"
+          className="absolute inset-0 rounded-full border-2 border-pink-400/30"
           initial={{ scale: 1, opacity: 0.5 }}
           animate={{ 
             scale: [1, 1.8, 2.2],
@@ -28,7 +28,7 @@ export default function InstagramButton() {
           transition={{
             duration: 3,
             repeat: Infinity,
-            delay: i * 1.5,
+            delay: i * 1,
             ease: "easeOut"
           }}
         />
@@ -64,7 +64,7 @@ export default function InstagramButton() {
             >
               {/* Animated gradient overlay */}
               <motion.div
-                className="absolute inset-0 rounded-full opacity-50 hidden sm:block"
+                className="absolute inset-0 rounded-full opacity-50"
                 style={{
                   background: "linear-gradient(135deg, transparent, rgba(255,255,255,0.3), transparent)",
                 }}
@@ -96,11 +96,11 @@ export default function InstagramButton() {
                 />
               </motion.div>
               
-              {/* Sparkle effect - apenas no desktop */}
+              {/* Sparkle effect */}
               {[0, 1, 2, 3].map((i) => (
                 <motion.div
                   key={i}
-                  className="absolute w-1 h-1 bg-white rounded-full hidden md:block"
+                  className="absolute w-1 h-1 bg-white rounded-full"
                   style={{
                     left: `${25 + i * 15}%`,
                     top: `${25 + i * 15}%`,
