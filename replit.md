@@ -19,9 +19,14 @@ Preferred communication style: Simple, everyday language.
 ### Backend
 
 -   **Server**: Express.js with TypeScript, ES Modules.
--   **Data Storage**: Interface-based storage abstraction (`IStorage`) with an in-memory implementation (`MemStorage`) for development. Drizzle ORM is configured for PostgreSQL (PostgreSQL via Replit is provisioned), with `@neondatabase/serverless` for connectivity. Multer handles local file uploads to an `uploads/` directory.
--   **API**: RESTful endpoints under `/api` for timeline data, media, and file uploads. Static file serving for uploaded media.
--   **Key Decisions**: Separation of storage interface for database flexibility, session-based approach ready, distinct development and production modes.
+-   **Data Storage**: Interface-based storage abstraction (`IStorage`) with dual-driver support:
+    -   **Development**: MemStorage (in-memory, resets on restart) when DATABASE_URL is not set
+    -   **Production**: DBStorage with automatic driver detection:
+        -   Neon PostgreSQL: Uses `@neondatabase/serverless` with Drizzle HTTP driver
+        -   Railway/Standard PostgreSQL: Uses `pg` (node-postgres) with Drizzle node-postgres driver
+    -   Auto-detection based on DATABASE_URL presence and content
+-   **API**: RESTful endpoints under `/api` for timeline data, media, file uploads, and deletion. Static file serving for uploaded media.
+-   **Key Decisions**: Separation of storage interface for database flexibility, dual-driver support for different PostgreSQL providers, distinct development and production modes.
 
 ### UI/UX Decisions
 
@@ -33,7 +38,7 @@ Preferred communication style: Simple, everyday language.
 ### Feature Specifications
 
 -   **Media Display**: Photos and videos organized by year in a scrollable timeline.
--   **Admin Panel**: Functionality for uploading new image and video content.
+-   **Admin Panel**: Functionality for uploading and deleting image and video content.
 -   **File Support**: Images (jpeg, jpg, png, gif) and videos (mp4, mov, avi, webm).
 -   **Responsiveness**: Optimized layouts for mobile and desktop across all components (HeroSection, TimelineSection, MediaLightbox, AdminPanel).
 
@@ -47,9 +52,10 @@ Preferred communication style: Simple, everyday language.
 
 ### Database & ORM
 
--   PostgreSQL (via Replit database)
+-   PostgreSQL (Neon or Railway/standard PostgreSQL)
 -   Drizzle ORM
--   `@neondatabase/serverless`
+-   `@neondatabase/serverless` (for Neon HTTP connections)
+-   `pg` (node-postgres for standard PostgreSQL connections)
 -   `drizzle-zod`
 -   `drizzle-kit` (for migrations)
 
@@ -100,6 +106,9 @@ Preferred communication style: Simple, everyday language.
 ### Important Notes
 
 -   The app is fully functional with in-memory storage for quick development
--   To persist data across restarts, provision a PostgreSQL database (app will auto-detect and use it if DATABASE_URL contains 'neon.tech')
+-   To persist data across restarts, set DATABASE_URL to a PostgreSQL connection string
+    -   Supports both Neon (HTTP) and standard PostgreSQL (Railway, Replit, etc.)
+    -   Auto-detects the appropriate driver based on the DATABASE_URL
 -   All uploads are stored locally in `uploads/` directory
 -   The Vite dev server is properly configured for Replit's proxy environment
+-   Admin panel includes media deletion functionality (client-side auth only)
