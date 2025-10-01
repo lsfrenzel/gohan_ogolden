@@ -141,12 +141,59 @@ This update documents the setup process for importing the project from GitHub in
 - ✅ Deployment configuration set to autoscale deployment target
 - ✅ All dependencies working correctly (tsx, vite, express, etc.)
 - ✅ Database schema verified and pushed successfully
+- ✅ **Configured automatic migrations for Railway deployment**
+  - Moved `drizzle-kit` to production dependencies
+  - Updated `railway.json` to run `npm run db:push` before server starts
+  - Database schema automatically syncs on every Railway deployment
 
 **Technical Notes**
 - The @neondatabase/serverless driver requires HTTP connection to Neon cloud databases
 - Replit's local PostgreSQL requires standard pg driver (not currently installed)
 - Storage abstraction allows easy switching between MemStorage and DBStorage
 - For production deployment with persistent storage, configure Neon database and DBStorage will automatically activate
+
+**Railway Automatic Migrations**
+
+⚠️ **Importante: Configuração Atual e Considerações de Segurança**
+
+A configuração atual executa `npm run db:push` automaticamente em cada deploy do Railway. Esta abordagem:
+
+**Quando é Seguro Usar `db:push`:**
+- ✅ Ambientes de desenvolvimento e staging
+- ✅ Projetos em fase inicial sem dados críticos
+- ✅ Mudanças aditivas no schema (adicionar colunas, tabelas)
+- ✅ Quando você tem backups recentes
+
+**Quando NÃO Usar `db:push` (Risco de Perda de Dados):**
+- ❌ Bancos de produção com dados reais
+- ❌ Ao remover colunas ou tabelas
+- ❌ Ao alterar tipos de colunas existentes
+- ❌ Sem backups do banco de dados
+
+**Alternativa Mais Segura para Produção:**
+
+Para produção com dados reais, use migrations geradas:
+
+```bash
+# 1. Gere migrations baseadas no schema
+npm run db:generate
+
+# 2. Revise os arquivos em /migrations
+
+# 3. Aplique manualmente via Railway CLI
+railway run npm run db:migrate
+```
+
+Depois, atualize `railway.json` para usar migrations:
+```json
+"startCommand": "npm run db:migrate && npm run start"
+```
+
+**Scripts Disponíveis:**
+- `npm run db:push` - Sync direto (desenvolvimento/staging)
+- `npm run db:generate` - Gera arquivos de migration para revisão
+- `npm run db:migrate` - Aplica migrations geradas (produção)
+- `npm run db:studio` - Interface visual do banco
 
 ### Updates from September 30, 2025
 
