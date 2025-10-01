@@ -90,8 +90,8 @@ export class DBStorage implements IStorage {
   }
 }
 
-// Use database if DATABASE_URL is available (Vercel production)
-// Use in-memory storage only for local development without DATABASE_URL
-const useDatabase = !!process.env.DATABASE_URL;
+// Use database if DATABASE_URL is available AND it's a Neon HTTP URL
+// Use in-memory storage for local development (Replit PostgreSQL uses standard driver, not Neon HTTP)
+const useDatabase = !!process.env.DATABASE_URL && process.env.DATABASE_URL.includes('neon.tech');
 
 export const storage = useDatabase ? new DBStorage() : new MemStorage();
