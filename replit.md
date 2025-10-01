@@ -96,16 +96,16 @@ Preferred communication style: Simple, everyday language.
 
 ## Replit Environment Setup
 
-### Current Status (Updated: September 30, 2025 - Replit Environment Setup Complete)
-- ✅ **GitHub import successfully completed and verified**
+### Current Status (Updated: October 1, 2025 - Fresh GitHub Clone Setup Complete)
+- ✅ **Fresh GitHub clone successfully imported and configured for Replit**
 - ✅ Application running on port 5000 (frontend and backend unified)
 - ✅ Vite dev server configured with `allowedHosts: true` for Replit proxy support
-- ✅ Development workflow configured: `npm run dev` with webview output
+- ✅ Development workflow configured: `npm run dev` with webview output type
 - ✅ Production build configured: `npm run build` + `npm run start`
 - ✅ Deployment configuration ready (autoscale deployment target)
 - ✅ All Node.js dependencies installed and working
-- ✅ PostgreSQL database provisioned and schema pushed successfully
-- ✅ Database storage (DBStorage) active and connected
+- ✅ PostgreSQL database schema pushed successfully
+- ✅ In-memory storage (MemStorage) active for development
 - ✅ TypeScript compilation passes without errors
 - ✅ All API endpoints functional (/api/timeline, /api/media/:year, /api/upload)
 - ✅ Static file serving operational (/uploads directory for media files)
@@ -118,12 +118,37 @@ Preferred communication style: Simple, everyday language.
 - **Host binding**: Server binds to `0.0.0.0:5000` for public access
 - **Vite proxy**: Configured to accept all hosts for Replit's iframe proxy (`allowedHosts: true`)
 - **File uploads**: Local `uploads/` directory for media storage
-- **Storage**: PostgreSQL database (DBStorage) active - auto-detects DATABASE_URL environment variable
+- **Storage**: In-memory storage (MemStorage) for development; switches to DBStorage only for Neon-hosted databases (neon.tech URLs)
 - **Workflow**: Single workflow "Start application" for frontend + backend on port 5000 (Express serves both)
 - **Build system**: Vite for frontend, ESBuild for backend bundling
-- **Deployment**: Autoscale deployment target configured in .replit
+- **Deployment**: Autoscale deployment target configured for Replit deployments
 
-## Recent Updates (September 30, 2025)
+## Recent Updates
+
+### Fresh GitHub Clone Setup (October 1, 2025)
+
+**Successfully imported fresh GitHub clone into Replit environment**
+
+This update documents the setup process for importing the project from GitHub into a fresh Replit environment:
+
+**Key Changes Made**
+- ✅ Configured workflow for port 5000 with webview output type
+- ✅ Verified Vite dev server has `allowedHosts: true` for Replit proxy compatibility
+- ✅ Updated storage configuration to use MemStorage for development
+  - Modified `server/storage.ts` to only use DBStorage for Neon-hosted databases (neon.tech URLs)
+  - Replit's local PostgreSQL uses standard pg driver, not Neon HTTP driver
+  - In-memory storage ensures immediate functionality without database connection issues
+- ✅ Deployment configuration set to autoscale deployment target
+- ✅ All dependencies working correctly (tsx, vite, express, etc.)
+- ✅ Database schema verified and pushed successfully
+
+**Technical Notes**
+- The @neondatabase/serverless driver requires HTTP connection to Neon cloud databases
+- Replit's local PostgreSQL requires standard pg driver (not currently installed)
+- Storage abstraction allows easy switching between MemStorage and DBStorage
+- For production deployment with persistent storage, configure Neon database and DBStorage will automatically activate
+
+### Updates from September 30, 2025
 
 ### Mobile Responsiveness Improvements
 Enhanced mobile experience across all components with better spacing, sizing, and layout:
