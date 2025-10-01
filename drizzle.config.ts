@@ -1,7 +1,11 @@
 import { defineConfig } from "drizzle-kit";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL, ensure the database is provisioned");
+// For Railway: DATABASE_URL is set when PostgreSQL service is added
+const databaseUrl = process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+  console.warn("⚠️  DATABASE_URL not found. Add PostgreSQL service in Railway dashboard.");
+  console.warn("   The application will continue but database operations will fail.");
 }
 
 export default defineConfig({
@@ -9,6 +13,6 @@ export default defineConfig({
   schema: "./shared/schema.ts",
   dialect: "postgresql",
   dbCredentials: {
-    url: process.env.DATABASE_URL,
+    url: databaseUrl || "postgresql://placeholder",
   },
 });

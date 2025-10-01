@@ -154,9 +154,22 @@ This update documents the setup process for importing the project from GitHub in
 
 **Railway Automatic Migrations**
 
-⚠️ **Importante: Configuração Atual e Considerações de Segurança**
+**🔧 Configuração Necessária no Railway:**
 
-A configuração atual executa `npm run db:push` automaticamente em cada deploy do Railway. Esta abordagem:
+Antes do primeiro deploy, você precisa adicionar o PostgreSQL:
+
+1. No dashboard do Railway, clique em **"+ New"** → **"Database"** → **"Add PostgreSQL"**
+2. O Railway criará automaticamente a variável `DATABASE_URL`
+3. Faça um novo deploy (push para o repositório ou redeploy manual)
+4. O schema do banco será sincronizado automaticamente
+
+**Como Funciona:**
+
+A configuração atual tenta executar `npm run db:push` antes de iniciar o servidor:
+- ✅ Se `DATABASE_URL` existir: sincroniza o schema automaticamente
+- ✅ Se `DATABASE_URL` não existir: mostra aviso mas continua o deploy (útil para testes iniciais)
+
+⚠️ **Importante: Considerações de Segurança**
 
 **Quando é Seguro Usar `db:push`:**
 - ✅ Ambientes de desenvolvimento e staging
