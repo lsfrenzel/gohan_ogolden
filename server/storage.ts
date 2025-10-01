@@ -116,8 +116,14 @@ export class DBStorage implements IStorage {
   }
 }
 
-// Use database if DATABASE_URL is available AND it's a Neon HTTP URL
-// Use in-memory storage for local development (Replit PostgreSQL uses standard driver, not Neon HTTP)
-const useDatabase = !!process.env.DATABASE_URL && process.env.DATABASE_URL.includes('neon.tech');
+// Use database if DATABASE_URL is available (supports both Neon and standard PostgreSQL like Railway)
+// Use in-memory storage only when DATABASE_URL is not set
+const useDatabase = !!process.env.DATABASE_URL;
+
+if (useDatabase) {
+  console.log('[STORAGE] Using DBStorage (persistent database)');
+} else {
+  console.log('[STORAGE] Using MemStorage (in-memory, resets on restart)');
+}
 
 export const storage = useDatabase ? new DBStorage() : new MemStorage();
