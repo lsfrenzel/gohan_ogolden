@@ -47,7 +47,7 @@ export default function InstagramButton() {
           <Button
             asChild
             size="icon"
-            className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full shadow-2xl relative overflow-hidden border-none cursor-pointer touch-manipulation"
+            className="w-16 h-16 rounded-full shadow-2xl relative overflow-hidden border-none cursor-pointer touch-manipulation"
             data-testid="button-instagram"
             style={{
               background: "linear-gradient(135deg, #833AB4, #FD1D1D, #F56040, #FCAF45)",
@@ -91,7 +91,7 @@ export default function InstagramButton() {
                 }}
               >
                 <SiInstagram 
-                  className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" 
+                  className="w-7 h-7 text-white" 
                   style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }} 
                 />
               </motion.div>

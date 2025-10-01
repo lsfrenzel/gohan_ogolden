@@ -45,7 +45,7 @@ export default function FloatingAdminButton({ onClick }: FloatingAdminButtonProp
         <Button
           onClick={onClick}
           size="icon"
-          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full shadow-2xl relative overflow-hidden border-none"
+          className="w-16 h-16 rounded-full shadow-2xl relative overflow-hidden border-none"
           data-testid="button-admin-toggle"
           style={{
             background: "linear-gradient(135deg, #F59E0B, #FBBF24, #F59E0B)",
@@ -75,7 +75,7 @@ export default function FloatingAdminButton({ onClick }: FloatingAdminButtonProp
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           >
-            <Settings className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }} />
+            <Settings className="w-7 h-7 text-white" style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }} />
           </motion.div>
           
           {/* Sparkle effect */}
