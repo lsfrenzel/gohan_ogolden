@@ -79,3 +79,27 @@ Preferred communication style: Simple, everyday language.
 -   Vite
 -   ESBuild
 -   `tsx` (for running TypeScript files)
+
+## Replit Environment Setup
+
+### Current Configuration (October 1, 2025)
+
+-   **Development Workflow**: Configured to run `npm run dev` on port 5000 with webview output
+-   **Host Configuration**: Server binds to `0.0.0.0:5000`, Vite configured with `allowedHosts: true` for Replit proxy compatibility
+-   **Storage Mode**: Currently using in-memory storage (MemStorage) - data resets on restart
+-   **Database**: Not provisioned (app works without it via MemStorage)
+-   **File Uploads**: Local filesystem storage in `uploads/` directory (excluded from git)
+-   **Deployment**: Configured for autoscale deployment with build command `npm run build` and start command `npm run start`
+
+### Running the Application
+
+-   **Development**: Workflow "Start application" runs automatically
+-   **Production Build**: `npm run build` - builds frontend and backend to `dist/`
+-   **Production Start**: `npm run start` - runs the production build
+
+### Important Notes
+
+-   The app is fully functional with in-memory storage for quick development
+-   To persist data across restarts, provision a PostgreSQL database (app will auto-detect and use it if DATABASE_URL contains 'neon.tech')
+-   All uploads are stored locally in `uploads/` directory
+-   The Vite dev server is properly configured for Replit's proxy environment
